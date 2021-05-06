@@ -15,7 +15,11 @@
         "vector": "cpp",
         "string_view": "cpp",
         "*.tcc": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "cmath": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "initializer_list": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

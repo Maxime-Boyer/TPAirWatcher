@@ -54,7 +54,7 @@ GestionMateriel ( const GestionMateriel & unGestionMateriel );
     //
     // Contrat :
     //
-vector<int> ObtenirIdCapteurZone(double lat, double lon, int rayon);
+vector<int> ObtenirIdCapteurZone(double lat, double lon, double rayon);
 
 vector<Capteur*> GetCapteurs();
 

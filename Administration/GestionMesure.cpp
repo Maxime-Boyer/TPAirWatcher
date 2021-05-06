@@ -10,15 +10,15 @@ using namespace std;
 #include "../Materiel/Date.h"
 #include "../Materiel/Mesure.h"
 
-GestionMateriel::GestionMesure(){
+GestionMesure::GestionMesure(){
 
 }
 
-GestionMateriel::~GestionMesure){
+GestionMesure::~GestionMesure){
 
 }
 
-void GestionMateriel::MiseEnMemoireMesures(){
+void GestionMesure::MiseEnMemoireMesures(){
     ifstream fic;
     fic.open("sensors.csv");
     
@@ -71,16 +71,19 @@ void GestionMateriel::MiseEnMemoireMesures(){
     }
 }
 
-vector<Mesure*> GestionMateriel::ObtenirDonneCapteurActuelle(int sensorId)
+vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 {
-    return vector <Mesure*>;
+    vector<Mesure*> donneesActuelle;
+    for (vector<Mesure*>::iterator iterateurMesure = mesures.begin(); iterateurMesure != mesures.end(); iterateurMesure++)
+    {
+        if(iterateurMesure->GetSensorId() == sensorId)
+        {
+            donneesActuelle.push_back(iterateurCapteur->GetValue());
+        }
+    }
+    return donneesActuelle;
 }
 
-vector<Mesure*> GestionMateriel::GetMesures(){
+vector<Mesure*> GestionMesure::GetMesures(){
     return mesures;
-}
-
-int GestionMateriel::ObtenirIdCapteurZone(Latitude,Longitude,rayon)
-{
-
 }

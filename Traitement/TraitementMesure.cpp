@@ -134,10 +134,25 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     GestionMesure * objetGestionMesure = new GestionMesure();
     GestionMateriel * objetGestionMateriel = new GestionMateriel();
 
-    vector<int> capteurDansLaZone = objetGestionMesure->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
-    for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
+    vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
+    for (int i = 0; i < capteurDansLaZone.size(); i++)
     {
-        vector<Mesure> mesures = objetGestionMesure->obtenirDonneCapteurActuelle(capteurZoneIter);
+        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]);
+        nbMesure++;
+        for (int j = 0; j<4; j++)
+        {
+            if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
+                o3 = o3 + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
+                 so2 = so2 + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId().compare("NO2") == 0){
+                no2 = no2 + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
+                pm10 = pm10 + mesures[j]->GetValue();
+            }
+    /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
+    {
+        vector<Mesure> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurZoneIter);
         nbMesure = nbMesure + 1;
         for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
         {

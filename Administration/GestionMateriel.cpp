@@ -65,9 +65,19 @@ void GestionMateriel::MiseEnMemoireCapteur(){
     }
 }
 
-vector<int> ObtenirIdCapteurZone(double lat, double lon, int rayon)
+vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double rayon)
 {
-  
+  vector<int> capteurDansLaZone;
+  double distanceCapteur
+  for (vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
+  {
+    distanceCapteur = sqrt( (iterateurCapteur->GetLongitude() - lon)^2 + (iterateurCapteur->GetLatitude() - lat)^2 );
+    if(distanceCapteur <= rayon)
+    {
+      capteurDansLaZone.push_back(iterateurCapteur->GetSensorId());
+    }
+  }
+  return capteurDansLaZone;
 }
 
 vector<Capteur*> GestionMateriel::GetCapteurs(){
