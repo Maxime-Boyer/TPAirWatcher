@@ -46,38 +46,32 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur capteur, int ray
     int pm10Autre = 0;
     int nbMesure = 0;
 
-    GestionMesure objetGestionMesure;
-    GestionMateriel objetGestionMateriel;
+    GestionMesure * objetGestionMesure = new GestionMesure();
+    GestionMateriel * objetGestionMateriel = new GestionMateriel();
 
-    vector <Mesure> mesuresAVerifier (objetGestionMesure.obtenirDonneCapteurActuelle(capteur.GetSensorId()));
+    vector <Mesure*> mesuresAVerifier (objetGestionMesure->ObtenirDonneCapteurActuelle(capteur.GetSensorId()));
 
-    mesuresAVerifier.push_back(o3CapteurDef);
-    mesuresAVerifier.push_back(so2CapteurDef);
-    mesuresAVerifier.push_back(no2CapteurDef);
-    mesuresAVerifier.push_back(pm10CapteurDef);
+    o3CapteurDef = mesuresAVerifier[0]->GetValue();
+    so2CapteurDef = mesuresAVerifier[1]->GetValue();
+    no2CapteurDef = mesuresAVerifier[2]->GetValue();
+    pm10CapteurDef = mesuresAVerifier[4]->GetValue();
 
-    vector <int> capteurDansLaZone (objetGestionMateriel.obtenirIdCapteurZone(capteur.GetLatitude(),capteur.GetLongitude(),rayon));
-    for (vector<int>::iterator i; i != capteurDansLaZone.end(); i++)
+    vector <int> capteurDansLaZone (objetGestionMateriel->ObtenirIdCapteurZone(capteur.GetLatitude(),capteur.GetLongitude(),rayon));
+    for (int i = 0; i < capteurDansLaZone.size(); i++)
     {
-        vector <Mesure> mesures (objetGestionMesure.obtenirDonneCapteurActuelle(capteurDansLaZone[i]));
+        vector <Mesure*> mesures (objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
         nbMesure++;
-        for(vector<Mesure>::iterator j; j != mesures.end; j++)
+        //for(vector<Mesure*>::iterator j = mesures.begin(); j != mesures.end(); j++)
+        for(int j = 0; j<4; j++)
         {
-            if(j->GetTypeMesureId() == "O3")
-            {
-                o3Autre = o3Autre + j->GetValue();
-            }
-            else if(j->GetTypeMesureId() == "SO2")
-            {
-                so2Autre = so2Autre + j->GetValue();
-            }
-            else if(j->GetTypeMesureId() == "SO2")
-            {
-                no2Autre = no2Autre + j->GetValue();
-            }
-            else if(j->GetTypeMesureId() == "SO2")
-            {
-                pm10Autre = pm10Autre + j->GetValue();
+            if(mesures[j]->GetTypeMesureId() == "O3"){
+                o3Autre = o3Autre + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
+                so2Autre = so2Autre + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
+                no2Autre = no2Autre + mesures[j]->GetValue();
+            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
+                pm10Autre = pm10Autre + mesures[j]->GetValue();
             }
         }
     }

@@ -71,6 +71,16 @@ void GestionMateriel::MiseEnMemoireMesures(){
     }
 }
 
-vector<Mesure*> GetMesures(){
+vector<Mesure*> GestionMateriel::ObtenirDonneCapteurActuelle(int sensorId)
+{
+    return vector <Mesure*>;
+}
+
+vector<Mesure*> GestionMateriel::GetMesures(){
     return mesures;
+}
+
+int GestionMateriel::ObtenirIdCapteurZone(Latitude,Longitude,rayon)
+{
+
 }

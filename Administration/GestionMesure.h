@@ -51,7 +51,7 @@ GestionMesure ( const GestionMesure & unGestionMesure );
     //
     // Contrat :
     //
-vector<Mesure*> obtenirDonneCapteurActuelle(int sensorId);
+vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
 
 void MiseEnMemoireMesures();
 

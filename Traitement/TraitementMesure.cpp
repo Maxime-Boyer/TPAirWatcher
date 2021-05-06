@@ -12,10 +12,13 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
-#include "TraitementCapteur.h"
+#include "TraitementMesure.h"
 #include "../Materiel/Mesure.h"
+#include "../Administration/GestionMateriel.h"
+#include "../Administration/GestionMesure.h"
 #include <vector>
 #include <ctime>
+#include <cstring>
 using namespace std;
 
 
@@ -85,30 +88,37 @@ TraitementMesure::TraitementMesure(){
 
 }
 
+TraitementMesure::~TraitementMesure(){
+    delete[] tabIndiceAtmoO3;
+    delete[] tabIndiceAtmoNo2;
+    delete[] tabIndiceAtmoSo2;
+    delete[] tabIndiceAtmoPm10;
+}
 
-int[][] TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
-    time_t dateDebutCourbe = cleaner.dateInstallation -1;
-    time_t dateFinCourbe;
-    time_t dateActuelle = time(0);
+/*
+int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
+    Date dateDebutCourbe = cleaner.dateInstallation -1;
+    Date dateFinCourbe;
+    Date dateActuelle = time(0);
     int indice = 0;
-    int courbe[][];
+    int ** courbe;
     /*if(cleaner.dateDesinstallation != null)
     {
         dateFinCourbe <- cleaner.dateDesinstallation;
     }else
-    {*/
+    
     dateFinCourbe = dateActuelle;
-    courbe = int[dateFinCourbe-dateDebutCourbe][10];
+    courbe = new int[dateFinCourbe-dateDebutCourbe][10];
     for(int i = 0; i < dateFinCourbe-dateDebutCourbe; i++)
     {
-        indice = calculQualiteAir(cleaner.latitude,cleaner.longitude,rayon,dateDebutCourbe+i);
+        indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,dateDebutCourbe+i);
         courbe[dateDebutCourbe+i][indice] = 1;
     }
     //}
-    return courbe
+    return courbe;
 
 }//------ Fin de Méthode
-
+*/
 int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, time_t date)
 {
     int o3 = 0;
@@ -121,26 +131,26 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     int indiceNo2 = 0;
     int indicePm10 = 0;
 
-    GestionMesure objetGestionMesure = new GestionMesure();
-    GestionMateriel objetGestionMateriel = new GestionMateriel();
+    GestionMesure * objetGestionMesure = new GestionMesure();
+    GestionMateriel * objetGestionMateriel = new GestionMateriel();
 
-    vector<int> capteurDansLaZone = objetGestionMesure->obtenirIdCapteurZone(Latitude,Longitude,rayon);
-    for (vector<Int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
+    vector<int> capteurDansLaZone = objetGestionMesure->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
+    for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
     {
         vector<Mesure> mesures = objetGestionMesure->obtenirDonneCapteurActuelle(capteurZoneIter);
         nbMesure = nbMesure + 1;
         for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
         {
-            if(mesuresIter->GetTypeMesureId().equals("O3")){
+            if(mesuresIter->GetTypeMesureId().compare("O3") == 0){
                 o3 = o3 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().equals("SO2")){
+            }else if(mesuresIter->GetTypeMesureId().compare("SO2") == 0){
                  so2 = so2 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().equals("NO2")){
+            }else if(mesuresIter->GetTypeMesureId().compare("NO2") == 0){
                 no2 = no2 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().equals("PM10")){
+            }else if(mesuresIter->GetTypeMesureId().compare("PM10") == 0){
                 pm10 = pm10 + mesuresIter->GetValue();
             }
-            switch(mesuresIter->GetTypeMesureId())
+            /*switch(mesuresIter->GetTypeMesureId())
             {
                 case "O3" : 
                     o3 = o3 + mesuresIter->GetValue();
@@ -157,7 +167,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
                 default:
                     cout << "Erreur switch";
 
-            }
+            }*/
         }
         o3 = o3/nbMesure;
         so2 = so2/nbMesure;

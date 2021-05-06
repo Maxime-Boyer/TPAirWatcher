@@ -45,7 +45,9 @@ public:
     //
     // Contrat :
     ////
-    int[][] CourbeAirCleaner(AirCleaner cleaner, int rayon);
+    TraitementMesure();
+    ~TraitementMesure();
+    int ** CourbeAirCleaner(AirCleaner cleaner, int rayon);
     int CalculQualiteAirZone(int Latitude, int Longitude, int rayon, time_t date);
 //------------------------------------------------------------------ PRIVE
 

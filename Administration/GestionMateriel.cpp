@@ -65,6 +65,11 @@ void GestionMateriel::MiseEnMemoireCapteur(){
     }
 }
 
+vector<int> ObtenirIdCapteurZone(double lat, double lon, int rayon)
+{
+  
+}
+
 vector<Capteur*> GestionMateriel::GetCapteurs(){
     return capteurs;
 }
