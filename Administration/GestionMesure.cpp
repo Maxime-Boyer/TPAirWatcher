@@ -76,9 +76,9 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
     vector<Mesure*> donneesActuelle;
     for (vector<Mesure*>::iterator iterateurMesure = mesures.begin(); iterateurMesure != mesures.end(); iterateurMesure++)
     {
-        if(iterateurMesure->GetSensorId() == sensorId)
+        if((*iterateurMesure)->GetSensorId() == sensorId)
         {
-            donneesActuelle.push_back(iterateurCapteur->GetValue());
+            donneesActuelle.push_back(*iterateurMesure);
         }
     }
     return donneesActuelle;

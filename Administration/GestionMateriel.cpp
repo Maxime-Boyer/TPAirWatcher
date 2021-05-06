@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 #include "GestionMateriel.h"
@@ -68,13 +69,13 @@ void GestionMateriel::MiseEnMemoireCapteur(){
 vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double rayon)
 {
   vector<int> capteurDansLaZone;
-  double distanceCapteur
-  for (vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
+  double distanceCapteur;
+  for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
   {
-    distanceCapteur = sqrt( (iterateurCapteur->GetLongitude() - lon)^2 + (iterateurCapteur->GetLatitude() - lat)^2 );
+    distanceCapteur = sqrt( ((*iterateurCapteur)->GetLongitude() - lon)*((*iterateurCapteur)->GetLongitude() - lon) + ((*iterateurCapteur)->GetLatitude() - lat)*((*iterateurCapteur)->GetLatitude() - lat) );
     if(distanceCapteur <= rayon)
     {
-      capteurDansLaZone.push_back(iterateurCapteur->GetSensorId());
+      capteurDansLaZone.push_back((*iterateurCapteur)->GetSensorId());
     }
   }
   return capteurDansLaZone;
