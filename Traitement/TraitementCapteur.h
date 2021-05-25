@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Ensemble  -  description
+                           TraitementCapteur  -  description
                              -------------------
     début                : 20.10.2020
     copyright            : (C) 2020 par Julien BOUVIER
     e-mail               : julien.bouvier@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Ensemble> (fichier Ensemble.h) ----------------
+//---------- Interface de la classe <TraitementCapteur> (fichier TraitementCapteur.h) ----------------
 #if ! defined ( TRAITEMENTCAPTEUR_H )
 #define TRAITEMENTCAPTEUR_H
 

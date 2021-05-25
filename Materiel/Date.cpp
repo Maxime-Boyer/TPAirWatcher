@@ -19,13 +19,13 @@ Date::Date(string date){
     seconds = stoi(date.substr(18,2));
 }
 
-/*int operator+(Date const& date)
+int operator+(Date const& date)
 {
     if(date.seconds+ this->seconds > 60)
     {
         
     }
-}*/
+}
 
 int Date::GetDay(){
     return day;

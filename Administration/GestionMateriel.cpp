@@ -42,27 +42,30 @@ void GestionMateriel::MiseEnMemoireCapteur(){
     //Tant que le fichier n'est pas vide
     while(fic.eof() == 0){
         getline(fic,line);
-        
-        while ((pos = line.find(delimiter)) != std::string::npos) {
-          partOfLine = line.substr(0, pos);
-          switch(i){
-            case 0:
-              id = stoi(partOfLine.substr(6,2));
-              break;
-            case 1:
-              latitude = atof(partOfLine.c_str());
-              break;
-            case 2:
-              longitude = atof(partOfLine.c_str());
-              break;
 
+        if(fic.eof() == 0){
+          while ((pos = line.find(delimiter)) != std::string::npos) {
+            partOfLine = line.substr(0, pos);
+            switch(i){
+              case 0:
+                id = stoi(partOfLine.substr(6,2));
+                break;
+              case 1:
+                latitude = atof(partOfLine.c_str());
+                break;
+              case 2:
+                longitude = atof(partOfLine.c_str());
+                break;
+
+            }
+            line.erase(0, pos + delimiter.length());
+            i++;
           }
-          line.erase(0, pos + delimiter.length());
-          i++;
-        }
 
-        i  = 0;
-        capteurs.push_back(new Capteur(id,latitude,longitude));
+          i  = 0;
+          
+          capteurs.push_back(new Capteur(id,latitude,longitude));
+        }
     }
 }
 
@@ -85,10 +88,11 @@ vector<Capteur*> GestionMateriel::GetCapteurs(){
     return capteurs;
 }
 
-/**
+
 int main(){
 
     GestionMateriel gestion;
     gestion.MiseEnMemoireCapteur();
-    cout << gestion.GetCapteurs().size();
-}*/
+    
+    return 0;
+}

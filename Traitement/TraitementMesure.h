@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Ensemble  -  description
+                           TraitementMesure  -  description
                              -------------------
     début                : 20.10.2020
     copyright            : (C) 2020 par Julien BOUVIER
     e-mail               : julien.bouvier@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Ensemble> (fichier Ensemble.h) ----------------
+//---------- Interface de la classe <TraitementMesure> (fichier TraitementMesure.h) ----------------
 #if ! defined ( TRAITEMENTMESURE_H )
 #define TRAITEMENTMESURE_H
 
@@ -22,7 +22,7 @@
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Ensemble>
+// Rôle de la classe <TraitementMesure>
 //
 //
 //------------------------------------------------------------------------
@@ -64,7 +64,7 @@ protected:
 //----------------------------------------------------- Attributs protégés
 };
 
-//-------------------------------- Autres définitions dépendantes de <Ensemble>
+//-------------------------------- Autres définitions dépendantes de <TraitementMesure>
 
 #endif // TRAITEMENTMESURE_H
 

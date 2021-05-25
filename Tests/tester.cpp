@@ -36,6 +36,8 @@ int main(int argc, char* argv[])
     int* nbEchoue = malloc(sizeof(int));
     
     *nbTests = 0;
+    *nbPasse = 0;
+    *nbEchoue = 0;
 
     cout << "##### LANCEMENT DES TESTS #####" << endl;
 
@@ -51,73 +53,11 @@ int main(int argc, char* argv[])
 
     cout << "# Calcul qualite de l'air dans un rayon" << endl;
     test(tCalculQualiteAirZoneValide(date), "Zone couverte", &nbPasse, &nbEchoue, &nbTests);
+    test(tCalculQualiteAirZoneNonCouverte(date), "Zone non couverte", &nbPasse, &nbEchoue, &nbTests);
+    test(tCalculQualiteAirZoneInvalide(date), "Zone innexistante", &nbPasse, &nbEchoue, &nbTests);
+    test(tImpactAirCleaner(), "Air cleaner existant", &nbPasse, &nbEchoue, &nbTests);
+    test(tImpactAirCleaner(), "Air cleaner inexistant", &nbPasse, &nbEchoue, &nbTests);
 
-    nbTests++;
-    cout << "- Test "<<nbTests<<" : Zone couverte ->";
-    if(tCalculQualiteAirZoneValide(date))
-    {
-        cout << "# passe" << endl;
-        nbPasse++;
-    }
-    else
-    {
-        cout << "# echoue" << endl;
-        nbEchoue++;
-    }
-    
-    nbTests++;
-    cout << "- Test "<<nbTests<<" : Zone non couverte" << endl;
-    if(tCalculQualiteAirZoneNonCouverte(date))
-    {
-        cout << "# passe" << endl;
-        nbPasse++;
-    }
-    else
-    {
-        cout << "# echoue" << endl;
-        nbEchoue++;
-    }
-
-    nbTests++;
-    cout << "- Test "<<nbTests<<" : Zone innexistante" << endl;
-    if(tCalculQualiteAirZoneInvalide(date))
-    {
-        cout << "# passe" << endl;
-        nbPasse++;
-    }
-    else
-    {
-        cout << "# echoue" << endl;
-        nbEchoue++;
-    }
-
-    //
-    cout << "# Calcul de l'impact d'un air cleaner" << endl;
-    nbTests++;
-    cout << "- Test "<<nbTests<<" : Air Cleaner existant ->";
-    if(tImpactAirCleaner())
-    {
-        cout << "# passe" << endl;
-        nbPasse++;
-    }
-    else
-    {
-        cout << "# echoue" << endl;
-        nbEchoue++;
-    }
-    
-    nbTests++;
-    cout << "- Test "<<nbTests<<" : Air Cleaner inexistant" << endl;
-    if(tImpactAirCleaner())
-    {
-        cout << "# passe" << endl;
-        nbPasse++;
-    }
-    else
-    {
-        cout << "# echoue" << endl;
-        nbEchoue++;
-    }
 
     // RESUME DES TESTS
     cout << "##### FIN DES TESTS #####" << endl;
@@ -132,7 +72,7 @@ int main(int argc, char* argv[])
 void test(bool retour, String description, int* nbPasse, int* nbEchoue, int* nbTest)
 {
     *nbTests++;
-    cout << "- Test " << *nbTests << " : " << description;
+    cout << "- Test " << *nbTests << " : " << description << " ->";
     if(retour)
     {
         cout << "# passe" << endl;
