@@ -6,7 +6,7 @@
 using namespace std;
 
 #include "GestionMateriel.h"
-#include "../Materiel/Capteur.h"
+//#include "../Materiel/Capteur.h"
 
 GestionMateriel::GestionMateriel(){
 

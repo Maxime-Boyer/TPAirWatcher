@@ -17,6 +17,7 @@ using namespace std;
 
 /********************************************************* DECLARATIONS */
 
+void test(bool retour, String description, int* nbPasse, int* nbEchoue, int* nbTest);
 bool tCalculQualiteAirZoneValide(time_t date);
 bool tCalculQualiteAirZoneNonCouverte(time_t date);
 bool tCalculQualiteAirZoneInvalide(time_t date);
@@ -30,9 +31,11 @@ bool tImpactAirCleaner();
 
 int main(int argc, char* argv[])
 {
-    int nbTests = 0;
-    int nbPasse = 0;
-    int nbEchoue = 0;
+    int* nbTests = malloc(sizeof(int));
+    int* nbPasse = malloc(sizeof(int));
+    int* nbEchoue = malloc(sizeof(int));
+    
+    *nbTests = 0;
 
     cout << "##### LANCEMENT DES TESTS #####" << endl;
 
@@ -47,6 +50,8 @@ int main(int argc, char* argv[])
     time_t date = mktime(dateF);
 
     cout << "# Calcul qualite de l'air dans un rayon" << endl;
+    test(tCalculQualiteAirZoneValide(date), "Zone couverte", &nbPasse, &nbEchoue, &nbTests);
+
     nbTests++;
     cout << "- Test "<<nbTests<<" : Zone couverte ->";
     if(tCalculQualiteAirZoneValide(date))
@@ -123,6 +128,22 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+
+void test(bool retour, String description, int* nbPasse, int* nbEchoue, int* nbTest)
+{
+    *nbTests++;
+    cout << "- Test " << *nbTests << " : " << description;
+    if(retour)
+    {
+        cout << "# passe" << endl;
+        *nbPasse++;
+    }
+    else
+    {
+        cout << "# echoue" << endl;
+        *nbEchoue++;
+    }
+}
 
 /********************************************************* DEFINITIONS */
 
