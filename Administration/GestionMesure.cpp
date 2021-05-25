@@ -43,6 +43,7 @@ void GestionMesure::MiseEnMemoireMesures(){
     int i = 0;
 
     int actualId = -1;
+    
 
     //Tant que le fichier n'est pas vide
     while(fic.eof() == 0){
@@ -58,7 +59,9 @@ void GestionMesure::MiseEnMemoireMesures(){
                 sensorId = stoi(partOfLine.substr(6,2)); 
                 if(sensorId != actualId){
                     actualId = sensorId;
-                    mesures[actualId] = new vector<Mesure*>();
+                    mesures[actualId].push_back(v);
+                    vector<Mesure* > v;
+
                 }
                  
                 break;
@@ -75,7 +78,7 @@ void GestionMesure::MiseEnMemoireMesures(){
         }
 
         i  = 0;
-        mesures[sensorId].push_back(new Mesure(sensorId,idTypeMesure,value,date));
+        v.push_back(new Mesure(sensorId,idTypeMesure,value,date));
     }
 }
 

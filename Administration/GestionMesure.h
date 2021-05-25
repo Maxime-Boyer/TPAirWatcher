@@ -35,6 +35,7 @@ public:
     
 //----------------------------------------------------- Constructeurs
 GestionMesure();
+sensorId,idTypeMesure,value,date
 
 GestionMesure ( const GestionMesure & unGestionMesure );
     // Mode d'emploi (constructeur de copie) :
