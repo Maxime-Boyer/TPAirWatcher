@@ -14,7 +14,7 @@ GestionMesure::GestionMesure(){
 
 }
 
-GestionMesure::~GestionMesure){
+GestionMesure::~GestionMesure(){
 
 }
 
@@ -23,9 +23,10 @@ void GestionMesure::MiseEnMemoireMesures(){
     fic.open("sensors.csv");
     
     Date date;
-    int idSensor;
+    int sensorId;
     string idTypeMesure;
     double value;
+    string line;
 
     if(fic){
 
@@ -41,6 +42,8 @@ void GestionMesure::MiseEnMemoireMesures(){
     size_t pos = 0;
     int i = 0;
 
+    int actualId = -1;
+
     //Tant que le fichier n'est pas vide
     while(fic.eof() == 0){
         getline(fic,line);
@@ -52,7 +55,12 @@ void GestionMesure::MiseEnMemoireMesures(){
                 date = Date(partOfLine);
                 break;
             case 1:
-                sensorId = stoi(partOfLine.substr(6,2));  
+                sensorId = stoi(partOfLine.substr(6,2)); 
+                if(sensorId != actualId){
+                    actualId = sensorId;
+                    mesures[actualId] = new vector<Mesure*>();
+                }
+                 
                 break;
             case 2:
                 idTypeMesure = partOfLine;
@@ -67,23 +75,22 @@ void GestionMesure::MiseEnMemoireMesures(){
         }
 
         i  = 0;
-        capteurs.push_back(new Mesure(sensorId,idTypeMesure,value,date));
+        mesures[sensorId].push_back(new Mesure(sensorId,idTypeMesure,value,date));
     }
 }
 
-vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
+Mesure* GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 {
-    vector<Mesure*> donneesActuelle;
-    for (vector<Mesure*>::iterator iterateurMesure = mesures.begin(); iterateurMesure != mesures.end(); iterateurMesure++)
-    {
-        if((*iterateurMesure)->GetSensorId() == sensorId)
-        {
-            donneesActuelle.push_back(*iterateurMesure);
-        }
-    }
-    return donneesActuelle;
+    return mesures[sensorId].back();
 }
 
-vector<Mesure*> GestionMesure::GetMesures(){
-    return mesures;
+vector<Mesure*> GestionMesure::GetMesures(int sensorId){
+    return mesures[sensorId];
+}
+
+int main(){
+    GestionMesure gestion;
+    gestion.MiseEnMemoireMesures();
+    Mesure* m = gestion.ObtenirDonneCapteurActuelle(0);
+    cout << m->GetValue() << endl;
 }

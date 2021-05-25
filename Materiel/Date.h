@@ -57,6 +57,11 @@ int GetHour();
 int GetMinutes();
 int GetSeconds();
 
+int operator-(int nbDays);
+int soustraireDate(Date * date);
+int operator+(int nbDays);
+int nombreJoursParMois(int mois);
+
 //------------------------------------------------------------------ PRIVE
 
 protected:

@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Ensemble  -  description
+                           TraitementCapteur  -  description
                              -------------------
     début                : $DATE$
     copyright            : (C) $YEAR$ par $AUTHOR$
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <Ensemble> (fichier Ensemble.cpp) ------------
+//---------- Réalisation de la classe <TraitementCapteur> (fichier TraitementCapteur.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -25,7 +25,7 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Ensemble::Méthode ( liste des paramètres )
+// type TraitementCapteur::Méthode ( liste des paramètres )
 // Algorithme :
 //
 //{

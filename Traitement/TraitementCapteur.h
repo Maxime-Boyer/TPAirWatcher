@@ -23,7 +23,7 @@
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Ensemble>
+// Rôle de la classe <TraitementCapteur>
 //
 //
 //------------------------------------------------------------------------
@@ -40,14 +40,8 @@ public:
 //----------------------------------------------------- Destructeur
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-//void Afficher();
 
-  double * identifierCapteurDefaillant(Capteur capteur, int rayon);
+double * identifierCapteurDefaillant(Capteur capteur, int rayon);
 //------------------------------------------------------------------ PRIVE
 
 protected:

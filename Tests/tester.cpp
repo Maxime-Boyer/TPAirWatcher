@@ -11,13 +11,14 @@
 
 #include <iostream>
 #include <ctime>
+#include <string>
 #include "../Traitement/TraitementMesure.h"
 
 using namespace std;
 
 /********************************************************* DECLARATIONS */
 
-void test(bool retour, String description, int* nbPasse, int* nbEchoue, int* nbTest);
+void test(bool retour, string description, int* nbPasse, int* nbEchoue, int* nbTest);
 bool tCalculQualiteAirZoneValide(time_t date);
 bool tCalculQualiteAirZoneNonCouverte(time_t date);
 bool tCalculQualiteAirZoneInvalide(time_t date);
@@ -31,9 +32,12 @@ bool tImpactAirCleaner();
 
 int main(int argc, char* argv[])
 {
-    int* nbTests = malloc(sizeof(int));
-    int* nbPasse = malloc(sizeof(int));
-    int* nbEchoue = malloc(sizeof(int));
+    int* nbTests;
+    nbTests = (int*)malloc(sizeof(int));
+    int* nbPasse;
+    nbPasse = (int*)malloc(sizeof(int));
+    int* nbEchoue;
+    nbEchoue = (int*)malloc(sizeof(int));
     
     *nbTests = 0;
     *nbPasse = 0;
@@ -52,11 +56,12 @@ int main(int argc, char* argv[])
     time_t date = mktime(dateF);
 
     cout << "# Calcul qualite de l'air dans un rayon" << endl;
-    test(tCalculQualiteAirZoneValide(date), "Zone couverte", &nbPasse, &nbEchoue, &nbTests);
-    test(tCalculQualiteAirZoneNonCouverte(date), "Zone non couverte", &nbPasse, &nbEchoue, &nbTests);
-    test(tCalculQualiteAirZoneInvalide(date), "Zone innexistante", &nbPasse, &nbEchoue, &nbTests);
-    test(tImpactAirCleaner(), "Air cleaner existant", &nbPasse, &nbEchoue, &nbTests);
-    test(tImpactAirCleaner(), "Air cleaner inexistant", &nbPasse, &nbEchoue, &nbTests);
+    test(tCalculQualiteAirZoneValide(date), "Zone couverte", nbPasse, nbEchoue, nbTests);
+    test(tCalculQualiteAirZoneNonCouverte(date), "Zone non couverte", nbPasse, nbEchoue, nbTests);
+    test(tCalculQualiteAirZoneInvalide(date), "Zone innexistante", nbPasse, nbEchoue, nbTests);
+    test(tImpactAirCleaner(), "Air cleaner existant", nbPasse, nbEchoue, nbTests);
+    test(tImpactAirCleaner(), "Air cleaner inexistant", nbPasse, nbEchoue, nbTests);
+
 
 
     // RESUME DES TESTS
@@ -69,7 +74,7 @@ int main(int argc, char* argv[])
 }
 
 
-void test(bool retour, String description, int* nbPasse, int* nbEchoue, int* nbTest)
+void test(bool retour, string description, int* nbPasse, int* nbEchoue, int* nbTests)
 {
     *nbTests++;
     cout << "- Test " << *nbTests << " : " << description << " ->";
@@ -92,7 +97,7 @@ bool tCalculQualiteAirZoneValide(time_t date)
     TraitementMesure traitement;
 
     /************* MODIFIER LES VALEURS POUR LES FAIRES CORRESPONDRE AVEC LES DATAS ***/
-    if(traitement.CalculQualiteAirZone(50, 50, 10, date) == 22)
+    if(traitement.CalculQualiteAirZone(44, 0.4, 100, date) == 50)
     {
         return true;
     }
@@ -106,7 +111,7 @@ bool tCalculQualiteAirZoneNonCouverte(time_t date)
 {
     TraitementMesure traitement;
     /************* MODIFIER LES VALEURS POUR LES FAIRES CORRESPONDRE AVEC LES DATAS ***/
-    if(traitement.CalculQualiteAirZone(90, 90, 10, date) == 0)
+    if(traitement.CalculQualiteAirZone(0.1, 0.1, 2, date) == 0)
     {
         return true;
     }

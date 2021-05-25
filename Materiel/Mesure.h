@@ -13,7 +13,7 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
 #include <ctime>
-#include "../Materiel/Date.h"
+#include "Date.h"
 
 using namespace std;
 //------------------------------------------------------------- Constantes
@@ -36,7 +36,7 @@ public:
     
 //----------------------------------------------------- Constructeurs
 Mesure();
-Mesure(int, string, double, time_t);
+Mesure(int, string, double, Date *);
 
 Mesure ( const Mesure & unMesure );
     // Mode d'emploi (constructeur de copie) :
@@ -60,7 +60,7 @@ string GetTypeMesureId();
 
 double GetValue();
 
-Date* GetDateMesure();
+Date * GetDateMesure();
 
 //------------------------------------------------------------------ PRIVE
 

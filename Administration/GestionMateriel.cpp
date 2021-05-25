@@ -6,7 +6,7 @@
 using namespace std;
 
 #include "GestionMateriel.h"
-//#include "../Materiel/Capteur.h"
+#define RAYON 6378.137
 
 GestionMateriel::GestionMateriel(){
 
@@ -73,15 +73,24 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
 {
   vector<int> capteurDansLaZone;
   double distanceCapteur;
+  double latRadian = lat*0.01745;
+  double lonRadian = lon*0.01745;
+
   for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
   {
-    distanceCapteur = sqrt( ((*iterateurCapteur)->GetLongitude() - lon)*((*iterateurCapteur)->GetLongitude() - lon) + ((*iterateurCapteur)->GetLatitude() - lat)*((*iterateurCapteur)->GetLatitude() - lat) );
-    if(distanceCapteur <= rayon)
-    {
+    
+    double latRadian2 = (*iterateurCapteur)->GetLatitude()*0.01745;
+    double lonRadian2 = (*iterateurCapteur)->GetLongitude()*0.01745;
+
+    distanceCapteur= acos(sin(latRadian)*sin(latRadian2)+cos(latRadian)*cos(latRadian2)*cos(lonRadian2-lonRadian));
+    distanceCapteur = RAYON*distanceCapteur;
+
+    if(distanceCapteur < rayon)
       capteurDansLaZone.push_back((*iterateurCapteur)->GetSensorId());
-    }
   }
+  
   return capteurDansLaZone;
+  
 }
 
 vector<Capteur*> GestionMateriel::GetCapteurs(){
@@ -94,5 +103,10 @@ int main(){
     GestionMateriel gestion;
     gestion.MiseEnMemoireCapteur();
     
+    vector<int> id = gestion.ObtenirIdCapteurZone(44,0.4,100);
+    for(vector<int>::iterator iterateurCapteur = id.begin(); iterateurCapteur != id.end(); iterateurCapteur++)
+    { 
+      cout << *iterateurCapteur << endl;
+    }
     return 0;
 }

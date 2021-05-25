@@ -51,11 +51,11 @@ GestionMesure ( const GestionMesure & unGestionMesure );
     //
     // Contrat :
     //
-vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
+Mesure* ObtenirDonneCapteurActuelle(int sensorId);
 
 void MiseEnMemoireMesures();
 
-vector<Mesure*> GetMesures();
+vector<Mesure*> GetMesures(int sensorId);
 
 
 //------------------------------------------------------------------ PRIVE
@@ -64,7 +64,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    vector<Mesure*> mesures;
+    vector<vector<Mesure*>> mesures;
 };
 
 //-------------------------------- Autres définitions dépendantes de <GestionMesure>

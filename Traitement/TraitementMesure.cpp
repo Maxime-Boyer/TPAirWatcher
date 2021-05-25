@@ -95,14 +95,13 @@ TraitementMesure::~TraitementMesure(){
     delete[] tabIndiceAtmoPm10;
 }
 
-/*
 int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
-    Date dateDebutCourbe = cleaner.dateInstallation -1;
+    Date dateDebutCourbe = cleaner.dateInstallation - 1;
     Date dateFinCourbe;
     Date dateActuelle = time(0);
     int indice = 0;
     int ** courbe;
-    /*if(cleaner.dateDesinstallation != null)
+    if(cleaner.dateDesinstallation != null)
     {
         dateFinCourbe <- cleaner.dateDesinstallation;
     }else
@@ -114,11 +113,11 @@ int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
         indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,dateDebutCourbe+i);
         courbe[dateDebutCourbe+i][indice] = 1;
     }
-    //}
     return courbe;
 
 }//------ Fin de Méthode
-*/
+
+
 int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, time_t date)
 {
     int o3 = 0;
@@ -135,7 +134,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     GestionMateriel * objetGestionMateriel = new GestionMateriel();
 
     vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
-    for (int i = 0; i < capteurDansLaZone.size(); i++)
+    for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]);
         nbMesure++;
