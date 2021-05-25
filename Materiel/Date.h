@@ -35,7 +35,7 @@ public:
 Date();
 Date(string);
 
-Date ( const Date & unDate );
+Date(const Date & theDate);
     // Mode d'emploi (constructeur de copie) :
     //
     // Contrat :
@@ -56,8 +56,8 @@ int GetYear();
 int GetHour();
 int GetMinutes();
 int GetSeconds();
-
-int operator-(int nbDays);
+bool equals(Date d);
+Date operator-(int nbDays);
 int soustraireDate(Date * date);
 int operator+(int nbDays);
 int nombreJoursParMois(int mois);

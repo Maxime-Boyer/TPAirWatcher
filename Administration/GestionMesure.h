@@ -35,7 +35,6 @@ public:
     
 //----------------------------------------------------- Constructeurs
 GestionMesure();
-sensorId,idTypeMesure,value,date
 
 GestionMesure ( const GestionMesure & unGestionMesure );
     // Mode d'emploi (constructeur de copie) :
@@ -52,11 +51,11 @@ GestionMesure ( const GestionMesure & unGestionMesure );
     //
     // Contrat :
     //
-Mesure* ObtenirDonneCapteurActuelle(int sensorId);
+vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
 
 void MiseEnMemoireMesures();
 
-vector<Mesure*> GetMesures(int sensorId);
+vector<vector<Mesure*>> GetMesures(int sensorId);
 
 
 //------------------------------------------------------------------ PRIVE
@@ -65,7 +64,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    vector<vector<Mesure*>> mesures;
+    vector<vector<vector<Mesure*>>> mesures;
 };
 
 //-------------------------------- Autres définitions dépendantes de <GestionMesure>

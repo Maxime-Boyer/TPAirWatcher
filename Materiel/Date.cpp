@@ -3,12 +3,18 @@
 #include <cmath>
 using namespace std;
 
+#define ANNEE_BISSEXTILE(A) (!(A%4) && (A%100) || !(A%400))
+
 Date::Date(){
 
 }
 
 Date::~Date(){
-
+    day = 0;
+    year = 0;
+    hour = 0;
+    minutes = 0;
+    seconds = 0;
 }
 
 Date::Date(string date){
@@ -18,6 +24,15 @@ Date::Date(string date){
     hour = stoi(date.substr(12,2));
     minutes = stoi(date.substr(15,2));
     seconds = stoi(date.substr(18,2));
+}
+
+Date::Date(const Date & copyDate){
+    this->day = copyDate.day;
+    this->month = copyDate.month;
+    this->year = copyDate.year;
+    this->hour = copyDate.hour;
+    this->minutes = copyDate.minutes;
+    this->seconds = copyDate.seconds;
 }
 
 int Date::nombreJoursParMois(int mois)
@@ -53,46 +68,45 @@ int Date::nombreJoursParMois(int mois)
     }
 }
 
-int Date::operator-(int nbDays)
+Date Date::operator-(int nbDays)
 {
+    Date newDate = *this;
     //On décide de faire des soustractions seulement sur des jours
-    if(day - nbDays <= 0)
+    if(newDate.day - nbDays <= 0)
     {
-        month--;
-        day -= nbDays;
-        if(month <= 0){ month = 12; year--;}
-        day += nombreJoursParMois(month);
+        newDate.month--;
+        newDate.day -= nbDays;
+        if(newDate.month <= 0){ newDate.month = 12; newDate.year--;}
+        newDate.day += nombreJoursParMois(month);
         cout << "pbl appel" << endl;
-        cout << "mois : " << month << endl;
-        cout << "jours : " << day << endl;
-        cout << "année : " << year << endl;
+        cout << "mois : " << newDate.month << endl;
+        cout << "jours : " << newDate.day << endl;
+        cout << "année : " << newDate.year << endl;
     }
     else{
-        day -= nbDays;
+        newDate.day -= nbDays;
     }
-    return day;
+    return newDate;
 }
 
 int Date::soustraireDate(Date * date)
 {
-    //On décide de faire des soustractions seulement sur des jours
-    if(day - date->day <= 0)
-    {
-        month--;
-        
-        day -= date->day;
+    if(year != date->year){
+        if(month != date->month){
+            if()
+        }
+    }
 
-        if(month <= 0){ month = 12; year--;}
-        day += nombreJoursParMois(month);
-        cout << "mois : " << month << endl;
-        cout << "jours : " << day << endl;
-        cout << "année : " << year << endl;
-    }
-    else{
-        day -= date->day;
-    }
-    return day;
+    int numero_jour( date d ) {
+    int  m = (d.mois + 9) % 12;   // jan->10 fev->11 mar->0 ... dec->9
+    int  a = d.annee - (m >= 10); // mais soustraire 1 an en jan et fev
+    return 1461*a/4 - a/100 + a/400 + (m*306 + 5)/10 + d.jour;
 }
+    
+    return abs(day-date->day);
+}
+
+
 
 int Date::operator+(int nbDays)
 {
@@ -130,16 +144,47 @@ int Date::GetSeconds(){
     return seconds;
 }
 
+bool Date::equals(Date d){
+    if(this->day == d.GetDay() && this->month == d.GetMonth() && this->year == d.GetYear()){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+int nombre_jours( Date d1, Date d2)
+{
+	const int jours_mois[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int nb_jours = 0;
+	int annee, mois;
+	
+	nb_jours += d2.day - d1.day; // Jours
+	
+	if (d1.year == d2.year) {
+		for (month = d1.month ; month < d2.month ; month++)
+			nb_jours += (ANNEE_BISSEXTILE(d2.annee) && month == 2) ? 29 : jours_mois[month-1];
+	} else {
+		for (mois = d1.mois ; mois <= 12 ; mois++)
+			nb_jours += (ANNEE_BISSEXTILE(d1.annee) && mois == 2) ? 29 : jours_mois[mois-1]; // Mois de d1
+		for (mois = 1 ; mois < d2.mois ; mois++)
+			nb_jours += (ANNEE_BISSEXTILE(d2.annee) && mois == 2) ? 29 : jours_mois[mois-1]; // Mois de d2
+		for (annee = d1.annee+1 ; annee < d2.annee ; annee++)
+			nb_jours += (ANNEE_BISSEXTILE(annee)) ? 366 : 365; // Années
+	}
+	
+	return nb_jours;
+}
+
+
 int main(){
     Date* d = new Date("03/01/2019  12:00:00");
     cout << d->GetDay() << "/" << d->GetMonth() << "/" << d->GetYear() << " " << d->GetHour() << ":" << d->GetMinutes() << ":" << d->GetSeconds()<< endl;
     Date* d2 = new Date("01/01/2019  12:00:00");
-    int ope4plus = d2->operator+(4);
-    int ope4moins = d2->operator-(1);
-    int opeDmoins = d2->soustraireDate(d);
-    cout << "on affiche d2 + 4 jours = " << ope4plus << endl;
-    cout << "on affiche d2 - 4 jours = " << ope4moins << endl;
-    cout << "on affiche d2 - d = " << opeDmoins << endl;
-    //cout << "bonjour";
+    //int ope4plus = d2->operator+(4);
+    Date d3 = d2->operator-(1);
+    //int opeDmoins = d2->soustraireDate(d);
+    //cout << "on affiche d2 + 4 jours = " << ope4plus << endl;
+    cout << "on affiche d3 = " << d3.GetDay() << " mois " << d3.GetMonth() << " year " << d3.GetYear() << endl;
     return 0;
 }

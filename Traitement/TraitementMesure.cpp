@@ -96,7 +96,7 @@ TraitementMesure::~TraitementMesure(){
 }
 
 int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
-    Date dateDebutCourbe = cleaner.dateInstallation - 1;
+    Date dateDebutCourbe = cleaner.dateInstallation.operator-(1);
     Date dateFinCourbe;
     Date dateActuelle = time(0);
     int indice = 0;
@@ -111,7 +111,7 @@ int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
     for(int i = 0; i < dateFinCourbe-dateDebutCourbe; i++)
     {
         indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,dateDebutCourbe+i);
-        courbe[dateDebutCourbe+i][indice] = 1;
+        courbe[dateDebutCourbe.GetDay()+i][indice] = 1;
     }
     return courbe;
 
