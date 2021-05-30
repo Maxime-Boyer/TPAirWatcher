@@ -8,15 +8,9 @@ using namespace std;
 const int days_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 Date::Date(){
-
 }
 
 Date::~Date(){
-    day = 0;
-    year = 0;
-    hour = 0;
-    minutes = 0;
-    seconds = 0;
 }
 
 Date::Date(string date){
@@ -55,39 +49,6 @@ Date::Date(const Date * copyDate){
     this->seconds = copyDate->seconds;
 }
 
-int Date::nombreJoursParMois(int mois)
-{
-    switch(mois){
-        case 1:
-            return 31;
-        case 2:
-            return 28;
-        case 3: 
-            return 31;
-        case 4:
-            return 30;
-        case 5: 
-            return 31;
-        case 6:
-            return 30;
-        case 7: 
-            return 31;
-        case 8:
-            return 31;
-        case 9:
-            return 30;
-        case 10:
-            return 31;
-        case 11:
-            return 30;
-        case 12: 
-            return 31;
-        default:
-            cout << "Erreur lors de l'appel nombre de jours mauvais numéro de mois" << endl;
-            return 30;
-    }
-}
-
 Date * Date::operator-(int nbDays)
 {
     Date * newDate = new Date(this); 
@@ -98,7 +59,7 @@ Date * Date::operator-(int nbDays)
         newDate->month--;
         newDate->day -= nbDays;
         if(newDate->month <= 0){ newDate->month = 12; newDate->year--;}
-        newDate->day += nombreJoursParMois(month);
+        newDate->day += days_month[month];
         cout << "pbl appel" << endl;
         cout << "mois : " << newDate->month << endl;
         cout << "jours : " << newDate->day << endl;
@@ -109,26 +70,6 @@ Date * Date::operator-(int nbDays)
     }
     return newDate;
 }
-
-int Date::soustraireDate(Date * date)
-{
-    if(year != date->year){
-        if(month != date->month){
-            //if()
-        }
-    }
-
-    /*int numero_jour( date d ) {
-    int  m = (d.mois + 9) % 12;   // jan->10 fev->11 mar->0 ... dec->9
-    int  a = d.annee - (m >= 10); // mais soustraire 1 an en jan et fev
-    return 1461*a/4 - a/100 + a/400 + (m*306 + 5)/10 + d.jour;
-    
-    }*/
-    
-    return abs(day-date->day);
-}
-
-
 
 Date * Date::operator+(int nbDays)
 {
@@ -175,7 +116,7 @@ bool Date::equals(Date d){
     }
 }
 
-int Date::number_days_between(Date * dateSup)
+int Date::Number_days_between(Date * dateSup)
 {
 	//const int days_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	int nb_days = 0;
@@ -203,18 +144,17 @@ int Date::number_days_between(Date * dateSup)
 	return nb_days;
 }
 
-/**
+
 int main(){
-    Date* d = new Date("03/01/2019  12:00:00");
+    Date* d = new Date("2019-01-03 12:00:00");
     cout << d->GetDay() << "/" << d->GetMonth() << "/" << d->GetYear() << " " << d->GetHour() << ":" << d->GetMinutes() << ":" << d->GetSeconds()<< endl;
-    Date* d2 = new Date("01/01/2019  12:00:00");
-    //int ope4plus = d2->operator+(4);
+    Date* d2 = new Date("2019-01-01 12:00:00");
     Date * d3 = new Date(d2->operator-(1));
-    Date* d4 = new Date("18/07/2019  12:00:00");
-    //int opeDmoins = d2->soustraireDate(d);
+    Date* d4 = new Date("2019-18-07 12:00:00");
+
     cout << "on affiche d2 + 4 jours = " << d2->operator+(4) << endl;
     cout << "on affiche d3 = " << d3->GetDay() << " mois " << d3->GetMonth() << " year " << d3->GetYear() << endl;
-    cout << "nombre jour entre d et d4 : " << d->number_days_between(d4) << endl;
+    cout << "nombre jour entre d et d4 : " << d->Number_days_between(d4) << endl;
     delete d;
     delete d2;
     delete d3;
@@ -231,4 +171,3 @@ int main(){
     delete dateActuelle;
     return 0;
 }
-*/

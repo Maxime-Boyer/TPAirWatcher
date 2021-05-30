@@ -14,6 +14,11 @@
 #include <iostream>
 #include <vector>
 #include "TraitementCapteur.h"
+#include "../Materiel/AirCleaner.h"
+#include "../Materiel/Capteur.h"
+#include "../Materiel/Mesure.h"
+#include "../Administration/GestionMesure.h"
+#include "../Administration/GestionMateriel.h"
 using namespace std;
 
 
@@ -57,7 +62,7 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur capteur, int ray
     pm10CapteurDef = mesuresAVerifier[4]->GetValue();
 
     vector <int> capteurDansLaZone (objetGestionMateriel->ObtenirIdCapteurZone(capteur.GetLatitude(),capteur.GetLongitude(),rayon));
-    for (int i = 0; i < capteurDansLaZone.size(); i++)
+    for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
         vector <Mesure*> mesures (objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
         nbMesure++;
@@ -86,10 +91,21 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur capteur, int ray
     ecartType[2] = abs(no2-no2CapteurDef)/no2;
     ecartType[3] = abs(pm10-pm10CapteurDef)/pm10;
 
+    //Affichage de la défaillance du capteur
+    int seuil = 10;
+    bool defaillance = false;
+    for(int i = 0; i<4; i++)
+    {
+        if(ecartType[i] > seuil){defaillance = true;}
+    }
+    if(defaillance){
+        cout << "Le capteur " << capteur.GetSensorId() << " n'est pas défaillant" << endl;
+    }
+    else{
+        cout << "Le capteur " << capteur.GetSensorId() << " n'est pas défaillant" << endl;
+    }
     return ecartType;
 }//------ Fin de Méthode
-
-
 
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées

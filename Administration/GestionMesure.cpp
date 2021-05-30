@@ -112,6 +112,29 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date
     vector<Mesure*> v;
     return v;
 }
+
+vector<vector<Mesure*>> GestionMesure::ObtenirDonneCapteurPeriode(int sensorId, Date* start, Date* stop){
+   vector<vector<Mesure*>> mesuresSensor = mesures[sensorId]; 
+   vector<vector<Mesure*>> mesuresToReturn; 
+   bool toAdd = false;
+   for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
+        if( ((*(itr))[0])->GetDateMesure()->equals(*start)){
+            toAdd = true;
+            mesuresToReturn.push_back(*(itr));
+        }
+        else if(toAdd){
+           mesuresToReturn.push_back(*(itr));  
+        }
+        else if(((*(itr))[0])->GetDateMesure()->equals(*stop)){
+            mesuresToReturn.push_back(*(itr));
+            return mesuresToReturn;
+        }
+    }
+
+    vector<vector<Mesure*>> v;
+    return v;
+}
+
 vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
     return mesures[sensorId];
 }

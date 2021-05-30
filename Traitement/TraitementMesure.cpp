@@ -111,7 +111,7 @@ TraitementMesure::~TraitementMesure(){
     delete[] tabIndiceAtmoPm10;
 }
 
-int** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
+void TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
     Date * dateDebutCourbe = new Date(cleaner.GetDateInstallation()->operator-(1));
     Date * dateBeginGraph = new Date(dateDebutCourbe);
     
@@ -128,13 +128,13 @@ int** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
         dateFinCourbe = new Date(dateActuelle);
     }
 
-    int nbDays = dateFinCourbe->number_days_between(dateDebutCourbe);
+    int nbDays = dateFinCourbe->Number_days_between(dateDebutCourbe);
     int indice = 0;
-
+    int indiceMax = 10;
     int ** courbe = new int*[nbDays];
     for (int i = 0; i < nbDays; i++)
     {
-        courbe[i] = new int[10];
+        courbe[i] = new int[indiceMax];
     }
 
     Date * currentDay = 0;
@@ -146,11 +146,39 @@ int** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
         courbe[currentDay->GetDay()][indice] = 1;
     }
 
+    cout << " ^" << endl;
+    cout << " |" << endl;
+    for(int i = 0; i < indiceMax; i++){
+        cout << indiceMax-i << "|";
+        for(int j = 0; j < nbDays; j++){
+            if(courbe[j][indiceMax-i-1] == 1){
+                cout << "*";
+            }
+            else{
+                cout <<" " ; 
+            }
+         }
+        cout << endl;
+    }
+  
+    cout << " ";
+    for(int i = 0; i < nbDays+1;i++){
+        cout << "-";
+    }
+    cout << ">";
+    
+    
     delete dateDebutCourbe;
     delete dateActuelle;
     delete dateBeginGraph;
     delete dateFinCourbe;
-    return courbe;
+    for (int i = 0; i < nbDays; i++)
+    {
+        delete[] courbe[i];
+    }
+    delete[] courbe;
+    
+    //return void;
 
 }//------ Fin de Méthode
 

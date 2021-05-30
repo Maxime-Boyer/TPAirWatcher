@@ -47,7 +47,7 @@ public:
     ////
     TraitementMesure();
     ~TraitementMesure();
-    int** CourbeAirCleaner(AirCleaner cleaner, int rayon);
+    void CourbeAirCleaner(AirCleaner cleaner, int rayon);
     int CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date * date);
 //------------------------------------------------------------------ PRIVE
 

@@ -50,7 +50,7 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
             partOfLine = line.substr(0, pos);
             switch(i){
               case 0:
-                id = stoi(partOfLine.substr(6,2));
+                id = stoi(partOfLine.substr(7,1));
                 break;
               case 1:
                 latitude = atof(partOfLine.c_str());
@@ -161,6 +161,21 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
 vector<Capteur*> GestionMateriel::GetCapteurs(){
     return capteurs;
 }
+
+
+Capteur* GestionMateriel::GetCapteur(int id){
+  for(vector<Capteur*>::iterator itr = capteurs.begin(); itr!= capteurs.end(); itr++)
+  { 
+      if((*itr)->GetIdCapteur() == id){
+        return *itr;
+      }
+  }
+
+
+  return nullptr;
+}
+
+
 vector<AirCleaner*> GestionMateriel::GetCleaners(){
     return cleaners;
 }
@@ -172,9 +187,9 @@ AirCleaner* GestionMateriel::GetAirCleaner(double lat, double lon){
         return *itr;
       }
   }
-
   return nullptr;
 }
+
 AirCleaner* GestionMateriel::GetAirCleaner(int id){
   for(vector<AirCleaner*>::iterator itr = cleaners.begin(); itr!= cleaners.end(); itr++)
   { 
@@ -192,7 +207,7 @@ int main(){
     gestion.MiseEnMemoireCapteur();
     gestion.MiseEnMemoireAirCleaner();
 
-    cout << gestion.GetCleaners().size() << endl;
+    cout << gestion.GetAirCleaner(45.333333,1.333333)->GetIdCleaner() << endl;
   
     return 0;
 }

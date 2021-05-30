@@ -12,8 +12,12 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <vector>
+
 #include "Materiel/AirCleaner.h"
+#include "Materiel/Capteur.h"
 #include "Traitement/TraitementMesure.h"
+#include "Traitement/TraitementCapteur.h"
 #include "Administration/GestionMateriel.h"
 
 using namespace std;
@@ -69,13 +73,54 @@ int main(int argc, char* argv[]){
 
 void identifierCapteurDefaillant()
 {
+    int idCapteur;
+    int choix;
+    int rayon;
+    TraitementCapteur* capteurTraitement = new TraitementCapteur();
+    GestionMateriel* matosManager = new GestionMateriel();
+
     cout << " # IDENTIFICATION D'UN CAPTEUR DEFAILLANT #" << endl;
+
+    cout << " 1 - Analyse d'un seul capteur" << endl;
+    cout << " 2 - Analyse de l'ensemble des capteurs" << endl;
+    cout << " QUel type d'analyse voulez-vous lancer ? (Entrer 1 ou 2) : ";
+    cin >> choix;
+    cout << endl;
+
+    if(choix == 1)
+    {
+        cout << " ID capteur : ";
+        cin >> idCapteur;
+        cout << " Rayon de comparaison : ";
+        cin >> rayon;
+        capteurTraitement->identifierCapteurDefaillant(*(matosManager->GetCapteur(idCapteur)), rayon);
+    }
+    else if(choix == 2)
+    {
+        cout << " Rayon de comparaison : ";
+        cin >> rayon;
+        vector<Capteur*> listeCapteurs;
+        listeCapteurs = matosManager->GetCapteurs();
+        for(vector<Capteur*>::iterator itr = listeCapteurs.begin(); itr!= listeCapteurs.end(); itr++)
+        { 
+            capteurTraitement->identifierCapteurDefaillant(*(*itr), rayon);
+        }
+    }
+    else
+    {
+        cout << " >> Choix invalide, retour au menu principal" << endl;
+    }
+
     
 }
 
 void observerImpactAirCleaner()
 {
-    int rayon, latitude, longitude, id, choix;
+    int rayon;
+    int latitude;
+    int longitude;
+    int id;
+    int choix;
     AirCleaner* aircleaner = new AirCleaner(); 
     TraitementMesure* mesureManager = new TraitementMesure();
     GestionMateriel* matosManager = new GestionMateriel(); 
@@ -84,7 +129,7 @@ void observerImpactAirCleaner()
 
     cout << " 1 - ID de l'AirCleaner connu" << endl;
     cout << " 2 - Localisation connue" << endl;
-    cout << " Comment voulez-vou sidentifier l'AirCleaner ? (Entrer 1 ou 2) : ";
+    cout << " Comment voulez-vous sidentifier l'AirCleaner ? (Entrer 1 ou 2) : ";
     cin >> choix;
     cout << endl;
 
@@ -96,8 +141,7 @@ void observerImpactAirCleaner()
         cin >> id;
         cout << " Rayon : ";
         cin >> rayon;
-        //mesureManager.CourbeAirCleaner(matosManager.SearchACById(id), rayon);
-        // /!\ Créer la méthode SearchById
+        mesureManager->CourbeAirCleaner(*(matosManager->GetAirCleaner(id)), rayon);
     }
     else if(choix == 2)
     {
@@ -107,7 +151,7 @@ void observerImpactAirCleaner()
         cin >> longitude;
         cout << " Rayon : ";
         cin >> rayon;
-        //mesureManager.CourbeAirCleaner(matosManager.SearchIdACByLL(latitude,, longitude), rayon);
+        mesureManager->CourbeAirCleaner(*(matosManager->GetAirCleaner(latitude, longitude)), rayon);
     }
     else
     {
@@ -116,8 +160,6 @@ void observerImpactAirCleaner()
 
     delete(aircleaner);
     delete(mesureManager);
-    delete(matosManager);
-
-    
+    delete(matosManager); 
     
 }

@@ -7,13 +7,13 @@ RMFLAGS = -f
 
 .PHONY : $(EFFACE)
 
-$(EXE) : $(EXE).o
+$(EXE) : $(EXE).o 
 	@echo 'EdL de <$(EXE)>'
-	@g++ -o $(EXE) $(EXE).o TraitementCapteur.o TraitementMesure.o
+	@g++ -o $(EXE) $(EXE).o TraitementCapteur.o TraitementMesure.o Date.o Capteur.o AirCleaner.o GestionMesure.o GestionMateriel.o Mesure.o
 
-$(EXE).o: $(EXE).cpp TraitementCapteur.o TraitementMesure.o
+$(EXE).o: $(EXE).cpp TraitementCapteur.o TraitementMesure.o Date.o Capteur.o AirCleaner.o GestionMesure.o GestionMateriel.o Mesure.o
 	@echo 'Compilation de <$(EXE).cpp>'
-	@g++ -c $(g++Linux) $(EXE).cpp TraitementCapteur.o TraitementMesure.o -g
+	@g++ -c $(g++Linux) $(EXE).cpp -g
 
 AirCleaner.o : ../Materiel/AirCleaner.cpp
 	@echo "Compilation de <AirCleaner.cpp>"

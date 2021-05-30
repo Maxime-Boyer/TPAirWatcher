@@ -53,6 +53,8 @@ GestionMesure ( const GestionMesure & unGestionMesure );
     //
 vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
 vector<Mesure*> ObtenirDonneCapteurJour(int sensorId, Date * date);
+vector<vector<Mesure*>> ObtenirDonneCapteurPeriode(int sensorId, Date * start, Date* stop);
+
 void MiseEnMemoireMesures();
 
 vector<vector<Mesure*>> GetMesures(int sensorId);
