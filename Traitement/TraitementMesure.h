@@ -47,8 +47,8 @@ public:
     ////
     TraitementMesure();
     ~TraitementMesure();
-    int ** CourbeAirCleaner(AirCleaner cleaner, int rayon);
-    int CalculQualiteAirZone(int Latitude, int Longitude, int rayon, time_t date);
+    int** CourbeAirCleaner(AirCleaner cleaner, int rayon);
+    int CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date * date);
 //------------------------------------------------------------------ PRIVE
 
     int *tabIndiceAtmoO3;

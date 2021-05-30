@@ -6,6 +6,8 @@
 using namespace std;
 
 #include "GestionMateriel.h"
+#include "../Materiel/AirCleaner.h"
+#include "../Materiel/Date.h"
 #define RAYON 6378.137
 
 GestionMateriel::GestionMateriel(){
@@ -15,22 +17,85 @@ GestionMateriel::GestionMateriel(){
 GestionMateriel::~GestionMateriel(){
 
 }
+void GestionMateriel::MiseEnMemoireAirCleaner(){
+  ifstream fic;
+  fic.open("cleaners.csv");
+
+  if(fic){
+
+  }
+  else{
+        throw runtime_error("Could not open file");
+  }
+  
+  string line;
+  int id;
+  double latitude;
+  double longitude;
+  Date* start = nullptr;
+  Date* stop = nullptr;
+
+  string delimiter = ";";
+  string partOfLine;
+  size_t pos = 0;
+  int i = 0;
+
+
+  //Tant que le fichier n'est pas vide
+    while(fic.eof() == 0){
+        getline(fic,line);
+
+        if(fic.eof() == 0){
+          while ((pos = line.find(delimiter)) != std::string::npos) {
+            partOfLine = line.substr(0, pos);
+            switch(i){
+              case 0:
+                id = stoi(partOfLine.substr(6,2));
+                break;
+              case 1:
+                latitude = atof(partOfLine.c_str());
+                break;
+              case 2:
+                longitude = atof(partOfLine.c_str());
+                break;
+              case 3:
+                start = new Date(partOfLine);
+                break;
+              case 4:
+                stop = new Date(partOfLine);
+                break;
+
+            }
+            line.erase(0, pos + delimiter.length());
+            i++;
+          }
+
+          i  = 0;
+          
+          cleaners.push_back(new AirCleaner(id,latitude,longitude,start,stop));
+        }
+    }
+}
+
+
 
 void GestionMateriel::MiseEnMemoireCapteur(){
     ifstream fic;
     fic.open("sensors.csv");
     
-    string line;
-    int id;
-    double latitude;
-    double longitude;
-
     if(fic){
 
     }
     else{
         throw runtime_error("Could not open file");
     }
+
+    string line;
+    int id;
+    double latitude;
+    double longitude;
+
+    
 
     
 
@@ -96,17 +161,38 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
 vector<Capteur*> GestionMateriel::GetCapteurs(){
     return capteurs;
 }
+vector<AirCleaner*> GestionMateriel::GetCleaners(){
+    return cleaners;
+}
 
+AirCleaner* GestionMateriel::GetAirCleaner(double lat, double lon){
+  for(vector<AirCleaner*>::iterator itr = cleaners.begin(); itr!= cleaners.end(); itr++)
+  { 
+      if((*itr)->GetLatitude() == lat && (*itr)->GetLongitude() == lon){
+        return *itr;
+      }
+  }
+
+  return nullptr;
+}
+AirCleaner* GestionMateriel::GetAirCleaner(int id){
+  for(vector<AirCleaner*>::iterator itr = cleaners.begin(); itr!= cleaners.end(); itr++)
+  { 
+      if((*itr)->GetIdCleaner() == id){
+        return *itr;
+      }
+  }
+
+  return nullptr;
+}
 
 int main(){
 
     GestionMateriel gestion;
     gestion.MiseEnMemoireCapteur();
-    
-    vector<int> id = gestion.ObtenirIdCapteurZone(44,0.4,100);
-    for(vector<int>::iterator iterateurCapteur = id.begin(); iterateurCapteur != id.end(); iterateurCapteur++)
-    { 
-      cout << *iterateurCapteur << endl;
-    }
+    gestion.MiseEnMemoireAirCleaner();
+
+    cout << gestion.GetCleaners().size() << endl;
+  
     return 0;
 }

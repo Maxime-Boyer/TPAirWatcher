@@ -61,7 +61,7 @@ int GetSeconds();
 bool equals(Date d);
 Date * operator-(int nbDays);
 int soustraireDate(Date * date);
-int operator+(int nbDays);
+Date * operator+(int nbDays);
 int nombreJoursParMois(int mois);
 int number_days_between(Date * dateSup);
 

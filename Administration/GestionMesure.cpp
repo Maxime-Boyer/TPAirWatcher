@@ -101,11 +101,16 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
     return mesures[sensorId].back();
 }
 
-vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId){
-    vector<Mesure*> mesuresSensor = mesures[sensorId];
-    for(vector<Mesure*>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
-
+vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date){
+    vector<vector<Mesure*>> mesuresSensor = mesures[sensorId];
+    for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
+        if( ((*(itr))[0])->GetDateMesure()->equals(*date)){
+            return *(itr);
+        }
     }
+
+    vector<Mesure*> v;
+    return v;
 }
 vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
     return mesures[sensorId];
@@ -116,10 +121,16 @@ int main(){
     GestionMesure gestion;
     gestion.MiseEnMemoireMesures();
 
-    vector<Mesure*> m = gestion.ObtenirDonneCapteurActuelle(0);
-    for(vector<Mesure*>::iterator itr = m.begin(); itr!= m.end(); itr++){
-
+    vector<Mesure*> m = gestion.ObtenirDonneCapteurJour(0,new Date("2019-01-27 12:00:00"));
+    if(m.size() != 0){
+        for(vector<Mesure*>::iterator itr = m.begin(); itr!= m.end(); itr++){
+            cout << (*(itr))->GetValue() << endl;
+        }
     }
+    else{
+        cout << "Date éronée" << endl;
+    }
+    
 
     
    

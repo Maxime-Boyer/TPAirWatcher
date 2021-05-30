@@ -52,10 +52,11 @@ GestionMesure ( const GestionMesure & unGestionMesure );
     // Contrat :
     //
 vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
-
+vector<Mesure*> ObtenirDonneCapteurJour(int sensorId, Date * date);
 void MiseEnMemoireMesures();
 
 vector<vector<Mesure*>> GetMesures(int sensorId);
+
 
 
 //------------------------------------------------------------------ PRIVE

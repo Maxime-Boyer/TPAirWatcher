@@ -35,7 +35,7 @@ public:
     
 //----------------------------------------------------- Constructeurs
 AirCleaner();
-AirCleaner(int,double,double,Date *);
+AirCleaner(int,double,double,Date *,Date*);
 
 AirCleaner( const AirCleaner & unAirCleaner );
     // Mode d'emploi (constructeur de copie) :
@@ -56,6 +56,7 @@ int GetIdCleaner();
 double GetLatitude();
 double GetLongitude();
 Date * GetDateInstallation();
+Date * GetDateDesinstallation();
 
 //------------------------------------------------------------------ PRIVE
 
@@ -65,6 +66,7 @@ protected:
 //----------------------------------------------------- Attributs protégés
     int idCleaner;
     Date * dateInstallation;
+    Date * dateDesinstallation;
     double latitude;
     double longitude;
 };

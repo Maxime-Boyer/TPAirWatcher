@@ -22,6 +22,20 @@
 #include <cstring>
 using namespace std;
 
+inline int max_indice( int a , int b , int c, int d) {
+    int max = a;
+    if(max < b){
+        max = b;
+    }
+    if(max < c){
+        max = c;
+    }
+    if(max < d)
+    {
+        max = d;
+    }
+    return max;
+}
 
 //------------------------------------------------------ Include personnel
 
@@ -36,6 +50,7 @@ using namespace std;
 //
 //{
 //} //----- Fin de Méthode
+
 
 TraitementMesure::TraitementMesure(){
     tabIndiceAtmoO3 = new int[9];
@@ -96,7 +111,7 @@ TraitementMesure::~TraitementMesure(){
     delete[] tabIndiceAtmoPm10;
 }
 
-int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
+int** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
     Date * dateDebutCourbe = new Date(cleaner.GetDateInstallation()->operator-(1));
     Date * dateBeginGraph = new Date(dateDebutCourbe);
     
@@ -104,18 +119,31 @@ int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
     time_t actuel = time(0);
     tm *ltm = localtime(&actuel);
     Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
-    Date * dateFinCourbe = new Date(dateActuelle);;
+    Date * dateFinCourbe;
+    
+    if(cleaner.GetDateDesinstallation() != nullptr){
+        dateFinCourbe = new Date(cleaner.GetDateDesinstallation());
+    }
+    else{
+        dateFinCourbe = new Date(dateActuelle);
+    }
 
     int nbDays = dateFinCourbe->number_days_between(dateDebutCourbe);
     int indice = 0;
-    int ** courbe = new int[nbDays][10];
-    int currentDay = 0;
+
+    int ** courbe = new int*[nbDays];
+    for (int i = 0; i < nbDays; i++)
+    {
+        courbe[i] = new int[10];
+    }
+
+    Date * currentDay = 0;
 
     for(int i = 0; i < nbDays; i++)
     {
         currentDay = dateBeginGraph->operator+(i);
         indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,currentDay);
-        courbe[currentDay][indice] = 1;
+        courbe[currentDay->GetDay()][indice] = 1;
     }
 
     delete dateDebutCourbe;
@@ -127,7 +155,7 @@ int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
 }//------ Fin de Méthode
 
 
-int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date date)
+int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date * date)
 {
     int o3 = 0;
     int so2 = 0;
@@ -145,7 +173,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
     for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
-        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]);
+        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
         nbMesure++;
         for (int j = 0; j<4; j++)
         {
@@ -158,8 +186,10 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
             }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
                 pm10 = pm10 + mesures[j]->GetValue();
             }
+        }
     /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
     {
+        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
         vector<Mesure> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurZoneIter);
         nbMesure = nbMesure + 1;
         for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
@@ -173,25 +203,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
             }else if(mesuresIter->GetTypeMesureId().compare("PM10") == 0){
                 pm10 = pm10 + mesuresIter->GetValue();
             }
-            /*switch(mesuresIter->GetTypeMesureId())
-            {
-                case "O3" : 
-                    o3 = o3 + mesuresIter->GetValue();
-                    break;
-                case "SO2" :
-                    so2 = so2 + mesuresIter->GetValue();
-                    break;
-                case "NO2":
-                    no2 = no2 + mesuresIter->GetValue();
-                    break;
-                case "PM10":
-                    pm10 = pm10 + mesuresIter->GetValue();
-                    break;
-                default:
-                    cout << "Erreur switch";
-
-            }*/
-        }
+        }*/
         o3 = o3/nbMesure;
         so2 = so2/nbMesure;
         no2 = no2/nbMesure;
@@ -231,7 +243,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
             }
         }
     }
-    return max(indiceO3,indiceNo2,indiceSo2,indicePm10);
+    return max_indice(indiceO3,indiceNo2,indiceSo2,indicePm10);
 }
     
 

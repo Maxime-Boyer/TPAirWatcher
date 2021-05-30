@@ -16,6 +16,7 @@
 using namespace std;
 
 #include "../Materiel/Capteur.h"
+#include "../Materiel/AirCleaner.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -57,13 +58,20 @@ GestionMateriel ( const GestionMateriel & unGestionMateriel );
 vector<int> ObtenirIdCapteurZone(double lat, double lon, double rayon);
 
 vector<Capteur*> GetCapteurs();
+vector<AirCleaner*> GetCleaners();
+AirCleaner* GetAirCleaner(double lat, double lon);
+AirCleaner* GetAirCleaner(int id);
+
 
 void MiseEnMemoireCapteur();
+void MiseEnMemoireAirCleaner();
+
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
 vector<Capteur*> capteurs;
+vector<AirCleaner*> cleaners;
 //----------------------------------------------------- Attributs protégés
    
 };

@@ -8,11 +8,12 @@ AirCleaner::~AirCleaner(){
 
 }
 
-AirCleaner::AirCleaner(int id,double lat,double lon , Date * instal){
+AirCleaner::AirCleaner(int id,double lat,double lon , Date * instal, Date* desinstal){
     this->idCleaner = id;
     this->latitude = lat;
     this->longitude = lon;
-    this->dateInstallation = new Date(instal);
+    this->dateInstallation = instal;
+    this->dateDesinstallation = desinstal;
 }
 
 int AirCleaner::GetIdCleaner(){
@@ -26,4 +27,7 @@ double AirCleaner::GetLongitude(){
 }
 Date * AirCleaner::GetDateInstallation(){
     return dateInstallation;
+}
+Date * AirCleaner::GetDateDesinstallation(){
+    return dateDesinstallation;
 }

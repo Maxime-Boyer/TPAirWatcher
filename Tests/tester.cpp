@@ -23,6 +23,7 @@ bool tCalculQualiteAirZoneValide(time_t date);
 bool tCalculQualiteAirZoneNonCouverte(time_t date);
 bool tCalculQualiteAirZoneInvalide(time_t date);
 bool tImpactAirCleaner();
+bool tCapteurDefaillant();
 
 
 /*********************************************************** CONSTANTES */
@@ -61,6 +62,8 @@ int main(int argc, char* argv[])
     test(tCalculQualiteAirZoneInvalide(date), "Zone innexistante", nbPasse, nbEchoue, nbTests);
     test(tImpactAirCleaner(), "Air cleaner existant", nbPasse, nbEchoue, nbTests);
     test(tImpactAirCleaner(), "Air cleaner inexistant", nbPasse, nbEchoue, nbTests);
+    test(tCapteurDefaillant(capteurOk), "Capteur fonctionnel",nbPasse, nbEchoue, nbTests);
+    test(tCapteurDefaillant(capteurKO), "Capteur défaillant",nbPasse, nbEchoue, nbTests);
 
 
 
@@ -96,7 +99,7 @@ bool tCalculQualiteAirZoneValide(time_t date)
 {
     TraitementMesure traitement;
 
-    /************* MODIFIER LES VALEURS POUR LES FAIRES CORRESPONDRE AVEC LES DATAS ***/
+    // Zone valide
     if(traitement.CalculQualiteAirZone(44, 0.4, 100, date) == 50)
     {
         return true;
@@ -110,7 +113,6 @@ bool tCalculQualiteAirZoneValide(time_t date)
 bool tCalculQualiteAirZoneNonCouverte(time_t date)
 {
     TraitementMesure traitement;
-    /************* MODIFIER LES VALEURS POUR LES FAIRES CORRESPONDRE AVEC LES DATAS ***/
     if(traitement.CalculQualiteAirZone(0.1, 0.1, 2, date) == 0)
     {
         return true;
@@ -137,5 +139,18 @@ bool tCalculQualiteAirInvalide(time_t date)
 
 bool tImpactAirCleaner()
 {
+    // Correspondance de rtour de la fonction
     return false;
+}
+
+bool tCapteurDefaillant()
+{
+    if(double * identifierCapteurDefaillant(Capteur capteur, int rayon))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

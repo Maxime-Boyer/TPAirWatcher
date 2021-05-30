@@ -4,7 +4,7 @@
 #include <ctime>
 using namespace std;
 
-#define ANNEE_BISSEXTILE(A) (!(A%4) && (A%100) || !(A%400))
+#define ANNEE_BISSEXTILE(A) ((!(A%4) && (A%100)) || !(A%400))
 const int days_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 Date::Date(){
@@ -130,7 +130,7 @@ int Date::soustraireDate(Date * date)
 
 
 
-int Date::operator+(int nbDays)
+Date * Date::operator+(int nbDays)
 {
     //On décide de faire des additions seulement sur des jours
     day += nbDays;
@@ -144,7 +144,7 @@ int Date::operator+(int nbDays)
         year++;
         month = 1;
     }
-    return day; 
+    return this; 
 }
 
 int Date::GetDay(){
