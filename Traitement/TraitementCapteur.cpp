@@ -75,17 +75,17 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
     {
         vector <Mesure*> mesures (objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
         nbMesure++;
-        //for(vector<Mesure*>::iterator j = mesures.begin(); j != mesures.end(); j++)
-        for(int j = 0; j<4; j++)
+        for(vector<Mesure*>::iterator mesuresIter = mesures.begin(); j != mesures.end(); j++)
+        //for(int j = 0; j<4; j++)
         {
-            if(mesures[j]->GetTypeMesureId() == "O3"){
-                o3Autre = o3Autre + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
-                so2Autre = so2Autre + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
-                no2Autre = no2Autre + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId() == "SO2"){
-                pm10Autre = pm10Autre + mesures[j]->GetValue();
+            if((*mesuresIter)->GetTypeMesureId().compare("O3") == 0){
+                o3Autre = o3Autre + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("SO2") == 0){
+                so2Autre = so2Autre + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("NO2") == 0){
+                no2Autre = no2Autre + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("PM10") == 0){
+                pm10Autre = pm10Autre + (*mesuresIter)->GetValue();
             }
         }
     }

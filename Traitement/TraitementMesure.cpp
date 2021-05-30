@@ -118,9 +118,15 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
         Date * dateBeginGraph = new Date(dateDebutCourbe);
         
         cout << "++ Declaration des dates de début OK" << endl;
+        /*
+        Dans le cas où les datasets sont à jour nous pouvons utiliser les lignes ci dessous.
+        Or dans le cas de ce TP, nous sommes bloqués au 31 décembre 2019.
+        
         time_t actuel = time(0);
         tm *ltm = localtime(&actuel);
         Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+        */
+        Date * dateActuelle = new Date(2019, 12, 31, 12, 00, 00); // Dernière date du fichier soit 31/12/2019 à midi
         Date * dateFinCourbe;
         cout << "++ Initialisation des dates de fin OK" << endl;
         
@@ -214,13 +220,28 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     cout << "++ Avant boucle for sur les capteurs"<< endl;
     for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
-        cout << "++rentrer boucle for sur les capteurs" << endl;
+        cout << "++   rentrer boucle for sur les capteurs" << endl;
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
-        cout << "creation vector<mesure*> mesures" << endl;
+        cout << "++   creation vector<mesure*> mesures" << endl;
         nbMesure++;
-        for (int j = 0; j<4; j++)
+
+        for (vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
         {
-cout << "rentrer for mesure comparisoairsonraison" << endl;
+            cout << "++     rentrer for mesure comparaison" << endl;
+            if((*mesuresIter)->GetTypeMesureId().compare("O3") == 0){
+                o3 = o3 + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("SO2") == 0){
+                 so2 = so2 + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("NO2") == 0){
+                no2 = no2 + (*mesuresIter)->GetValue();
+            }else if((*mesuresIter)->GetTypeMesureId().compare("PM10") == 0){
+                pm10 = pm10 + (*mesuresIter)->GetValue();
+            }
+        }
+
+        /*for (int j = 0; j<4; j++)
+        {
+            cout << "++     rentrer for mesure comparaison" << endl;
             if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
                 o3 = o3 + mesures[j]->GetValue();
             }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
@@ -230,8 +251,11 @@ cout << "rentrer for mesure comparisoairsonraison" << endl;
             }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
                 pm10 = pm10 + mesures[j]->GetValue();
             }
-        }
+        }*/
+
+        cout << "++   sorti boucle comparaison" << endl;
     }
+    cout << "++ sorti boucle for sur les capteurs" << endl;
     /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
     {
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
