@@ -41,7 +41,7 @@ public:
 
 //----------------------------------------------------- Méthodes publiques
 
-double * identifierCapteurDefaillant(Capteur capteur, int rayon);
+double * identifierCapteurDefaillant(Capteur * capteur, int rayon);
 //------------------------------------------------------------------ PRIVE
 
 protected:

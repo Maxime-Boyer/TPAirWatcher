@@ -11,7 +11,7 @@ using namespace std;
 #include "../Materiel/Mesure.h"
 
 GestionMesure::GestionMesure(){
-
+    this->MiseEnMemoireMesures();
 }
 
 GestionMesure::~GestionMesure(){
@@ -20,7 +20,7 @@ GestionMesure::~GestionMesure(){
 
 void GestionMesure::MiseEnMemoireMesures(){
     ifstream fic;
-    fic.open("measurements.csv");
+    fic.open("Administration/measurements.csv");
     
     Date * date = nullptr;
     int sensorId;
@@ -139,7 +139,7 @@ vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
     return mesures[sensorId];
 }
 
-
+/*
 int main(){
     GestionMesure gestion;
     gestion.MiseEnMemoireMesures();
@@ -159,4 +159,4 @@ int main(){
    
 
     return 0;
-}
+}*/

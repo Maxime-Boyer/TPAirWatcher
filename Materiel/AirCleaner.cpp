@@ -16,6 +16,15 @@ AirCleaner::AirCleaner(int id,double lat,double lon , Date * instal, Date* desin
     this->dateDesinstallation = desinstal;
 }
 
+AirCleaner::AirCleaner( const AirCleaner & unAirCleaner )
+{
+    this->idCleaner = unAirCleaner.idCleaner;
+    this->latitude = unAirCleaner.latitude;
+    this->longitude = unAirCleaner.longitude;
+    this->dateInstallation = new Date(unAirCleaner.dateInstallation);
+    this->dateDesinstallation = new Date(unAirCleaner.dateDesinstallation);
+}
+
 int AirCleaner::GetIdCleaner(){
     return idCleaner;
 }

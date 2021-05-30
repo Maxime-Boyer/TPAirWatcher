@@ -7,49 +7,49 @@ RMFLAGS = -f
 
 .PHONY : $(EFFACE)
 
-$(EXE) : $(EXE).o AirCleaner.o Capteur.o Date.o Mesure.o TypeMesure.o GestionMateriel.o GestionMesure.o TraitementMesure.o TraitementCapteur.o
+$(EXE) : $(EXE).o 
 	@echo 'EdL de <$(EXE)>'
-	@g++ -o $(EXE) $(EXE).o AirCleaner.o Capteur.o Date.o Mesure.o TypeMesure.o GestionMateriel.o GestionMesure.o TraitementMesure.o TraitementCapteur.o
+	@g++ -o $(EXE) $(EXE).o AirCleaner.o TraitementCapteur.o TraitementMesure.o Date.o TypeMesure.o Capteur.o GestionMesure.o GestionMateriel.o Mesure.o
 
-$(EXE).o: $(EXE).cpp
+$(EXE).o: $(EXE).cpp TraitementCapteur.o TraitementMesure.o TypeMesure.o Date.o Capteur.o AirCleaner.o GestionMesure.o GestionMateriel.o Mesure.o
 	@echo 'Compilation de <$(EXE).cpp>'
-	@g++ -c $(g++Linux) $(EXE).cpp  -g
+	@g++ -c $(g++Linux) $(EXE).cpp -g
 
 AirCleaner.o : Materiel/AirCleaner.cpp
 	@echo "Compilation de <AirCleaner.cpp>"
 	@g++ -c $(g++Linux) Materiel/AirCleaner.cpp $(CCFLAGS)
 
-Capteur.o : Materiel/Capteur.cpp
+Capteur.o : ./Materiel/Capteur.cpp
 	@echo "Compilation de <Capteur.cpp>"
-	@g++ -c $(g++Linux) Materiel/Capteur.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Materiel/Capteur.cpp $(CCFLAGS)
 
-Date.o : Materiel/Date.cpp
+Date.o : ./Materiel/Date.cpp
 	@echo "Compilation de <Date.cpp>"
-	@g++ -c $(g++Linux) Materiel/Date.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Materiel/Date.cpp $(CCFLAGS)
 
-Mesure.o : Materiel/Mesure.cpp
-	@echo "Compilation de <Mesure.cpp>"
-	@g++ -c $(g++Linux) Materiel/Mesure.cpp $(CCFLAGS)
-
-TypeMesure.o : Materiel/TypeMesure.cpp
+TypeMesure.o : ./Materiel/TypeMesure.cpp
 	@echo "Compilation de <TypeMesure.cpp>"
-	@g++ -c $(g++Linux) Materiel/TypeMesure.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Materiel/TypeMesure.cpp $(CCFLAGS)
 
-GestionMateriel.o : Administration/GestionMateriel.cpp
+Mesure.o : ./Materiel/Mesure.cpp
+	@echo "Compilation de <Mesure.cpp>"
+	@g++ -c $(g++Linux) ./Materiel/Mesure.cpp $(CCFLAGS)
+
+GestionMateriel.o : ./Administration/GestionMateriel.cpp
 	@echo "Compilation de <GestionMateriel.cpp>"
-	@g++ -c $(g++Linux) Administration/GestionMateriel.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Administration/GestionMateriel.cpp $(CCFLAGS)
 
-GestionMesure.o : Administration/GestionMesure.cpp
+GestionMesure.o : ./Administration/GestionMesure.cpp
 	@echo "Compilation de <GestionMesure.cpp>"
-	@g++ -c $(g++Linux) Administration/GestionMesure.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Administration/GestionMesure.cpp $(CCFLAGS)
 
-TraitementMesure.o : Traitement/TraitementMesure.cpp
-	@echo "Compilation de <TraitementMesure.cpp>"
-	@g++ -c $(g++Linux) Traitement/TraitementMesure.cpp 
-
-TraitementCapteur.o : Traitement/TraitementCapteur.cpp
+TraitementCapteur.o : ./Traitement/TraitementCapteur.cpp
 	@echo "Compilation de <TraitementCapteur.cpp>"
-	@g++ -c $(g++Linux) Traitement/TraitementCapteur.cpp $(CCFLAGS)
+	@g++ -c $(g++Linux) ./Traitement/TraitementCapteur.cpp $(CCFLAGS)
+
+TraitementMesure.o : ./Traitement/TraitementMesure.cpp
+	@echo "Compilation de <TraitementMesure.cpp>"
+	@g++ -c $(g++Linux) ./Traitement/TraitementMesure.cpp $(CCFLAGS)
 
 $(EFFACE) :
 	$(RM) $(RMFLAGS) $(EXE) *.o

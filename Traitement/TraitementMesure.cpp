@@ -112,72 +112,82 @@ TraitementMesure::~TraitementMesure(){
 }
 
 void TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
-    Date * dateDebutCourbe = new Date(cleaner.GetDateInstallation()->operator-(1));
-    Date * dateBeginGraph = new Date(dateDebutCourbe);
-    
+    if(rayon > 0){
 
-    time_t actuel = time(0);
-    tm *ltm = localtime(&actuel);
-    Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
-    Date * dateFinCourbe;
-    
-    if(cleaner.GetDateDesinstallation() != nullptr){
-        dateFinCourbe = new Date(cleaner.GetDateDesinstallation());
-    }
-    else{
-        dateFinCourbe = new Date(dateActuelle);
-    }
+        Date * dateDebutCourbe = new Date(cleaner.GetDateInstallation()->operator-(1));
+        Date * dateBeginGraph = new Date(dateDebutCourbe);
+        
+        cout << "++ Declaration des dates de début OK" << endl;
+        time_t actuel = time(0);
+        tm *ltm = localtime(&actuel);
+        Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+        Date * dateFinCourbe;
+        cout << "++ Initialisation des dates de fin OK" << endl;
+        
+        if(cleaner.GetDateDesinstallation() != nullptr){
+            dateFinCourbe = new Date(cleaner.GetDateDesinstallation());
+        }
+        else{
+            dateFinCourbe = new Date(dateActuelle);
+        }
+        cout << "++ Récupération date de fin OK" << endl;
 
-    int nbDays = dateFinCourbe->Number_days_between(dateDebutCourbe);
-    int indice = 0;
-    int indiceMax = 10;
-    int ** courbe = new int*[nbDays];
-    for (int i = 0; i < nbDays; i++)
-    {
-        courbe[i] = new int[indiceMax];
-    }
+        int nbDays = dateFinCourbe->Number_days_between(dateDebutCourbe);
+        int indice = 0;
+        int indiceMax = 10;
+        int ** courbe = new int*[nbDays];
+        cout << "++ Initialisation des variables 1 OK" << endl;
+        for (int i = 0; i < nbDays; i++)
+        {
+            courbe[i] = new int[indiceMax];
+        }
+        cout << "++ Declaration de la courbe OK" << endl;
 
-    Date * currentDay = 0;
+        Date * currentDay;
 
-    for(int i = 0; i < nbDays; i++)
-    {
-        currentDay = dateBeginGraph->operator+(i);
-        indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,currentDay);
-        courbe[currentDay->GetDay()][indice] = 1;
-    }
+        for(int i = 0; i < nbDays; i++)
+        {
+            currentDay = dateBeginGraph->operator+(i);
+            indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,currentDay);
+            courbe[i][indice] = 1;
+        }
+        cout << "++ Remplissage de la courbe OK" << endl;
 
-    cout << " ^" << endl;
-    cout << " |" << endl;
-    for(int i = 0; i < indiceMax; i++){
-        cout << indiceMax-i << "|";
-        for(int j = 0; j < nbDays; j++){
-            if(courbe[j][indiceMax-i-1] == 1){
-                cout << "*";
+        cout << " ^" << endl;
+        cout << " |" << endl;
+        for(int i = 0; i < indiceMax; i++){
+            cout << indiceMax-i << "|";
+            for(int j = 0; j < nbDays; j++){
+                if(courbe[j][indiceMax-i-1] == 1){
+                    cout << "*";
+                }
+                else{
+                    cout <<" " ; 
+                }
             }
-            else{
-                cout <<" " ; 
-            }
-         }
-        cout << endl;
-    }
+            cout << endl;
+        }
   
-    cout << " ";
-    for(int i = 0; i < nbDays+1;i++){
-        cout << "-";
+        cout << " ";
+        for(int i = 0; i < nbDays+1;i++){
+            cout << "-";
+        }
+        cout << ">";
+    
+        delete dateDebutCourbe;
+        delete dateActuelle;
+        delete dateBeginGraph;
+        delete dateFinCourbe;
+        for (int i = 0; i < nbDays; i++)
+        {
+            delete[] courbe[i];
+        }
+        delete[] courbe;
     }
-    cout << ">";
-    
-    
-    delete dateDebutCourbe;
-    delete dateActuelle;
-    delete dateBeginGraph;
-    delete dateFinCourbe;
-    for (int i = 0; i < nbDays; i++)
+    else
     {
-        delete[] courbe[i];
+        cout << "++ IMPOSSIBLE CLEANER NULL OU RAYON NEGATIF" << endl;
     }
-    delete[] courbe;
-    
     //return void;
 
 }//------ Fin de Méthode
@@ -195,16 +205,22 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
     int indiceNo2 = 0;
     int indicePm10 = 0;
 
+    cout << "++ Calcul Qualite Air Zone" << endl;
+    
     GestionMesure * objetGestionMesure = new GestionMesure();
     GestionMateriel * objetGestionMateriel = new GestionMateriel();
 
     vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(Latitude,Longitude,rayon);
+    cout << "++ Avant boucle for sur les capteurs"<< endl;
     for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
+        cout << "++rentrer boucle for sur les capteurs" << endl;
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
+        cout << "creation vector<mesure*> mesures" << endl;
         nbMesure++;
         for (int j = 0; j<4; j++)
         {
+cout << "rentrer for mesure comparisoairsonraison" << endl;
             if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
                 o3 = o3 + mesures[j]->GetValue();
             }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
@@ -215,6 +231,7 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
                 pm10 = pm10 + mesures[j]->GetValue();
             }
         }
+    }
     /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
     {
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
@@ -232,45 +249,46 @@ int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayo
                 pm10 = pm10 + mesuresIter->GetValue();
             }
         }*/
-        o3 = o3/nbMesure;
-        so2 = so2/nbMesure;
-        no2 = no2/nbMesure;
-        pm10 = pm10/nbMesure;
+        
+    o3 = o3/nbMesure;
+    so2 = so2/nbMesure;
+    no2 = no2/nbMesure;
+    pm10 = pm10/nbMesure;
 
         
-        //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
-        for(int i = 0; i < 9; i++)
+    //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
+    for(int i = 0; i < 9; i++)
+    {
+        if(o3 >= 240){
+            indiceO3 = 10;
+        }
+        if(o3 <= tabIndiceAtmoO3[i])
         {
-            if(o3 >= 240){
-                indiceO3 = 10;
-            }
-            if(o3 <= tabIndiceAtmoO3[i])
-            {
-                indiceO3 = i+1;
-            }
-            if(no2 >= 400){
-                indiceO3 = 10;
-            }
-            if(no2 <= tabIndiceAtmoNo2[i])
-            {
-                indiceNo2 = i+1;
-            }
-            if(so2 >= 500){
-                indiceO3 = 10;
-            }
-            if(so2 <= tabIndiceAtmoSo2[i])
-            {
-                indiceSo2= i+1;
-            }
-            if(pm10 >= 80){
-                indiceO3 = 10;
-            }
-            if(pm10 <= tabIndiceAtmoPm10[i])
-            {
-                indicePm10 = i+1;
-            }
+            indiceO3 = i+1;
+        }
+        if(no2 >= 400){
+            indiceO3 = 10;
+        }
+        if(no2 <= tabIndiceAtmoNo2[i])
+        {
+            indiceNo2 = i+1;
+        }
+        if(so2 >= 500){
+            indiceO3 = 10;
+        }
+        if(so2 <= tabIndiceAtmoSo2[i])
+        {
+            indiceSo2= i+1;
+        }
+        if(pm10 >= 80){
+            indiceO3 = 10;
+        }
+        if(pm10 <= tabIndiceAtmoPm10[i])
+        {
+            indicePm10 = i+1;
         }
     }
+    
     return max_indice(indiceO3,indiceNo2,indiceSo2,indicePm10);
 }
     

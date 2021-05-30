@@ -60,10 +60,6 @@ Date * Date::operator-(int nbDays)
         newDate->day -= nbDays;
         if(newDate->month <= 0){ newDate->month = 12; newDate->year--;}
         newDate->day += days_month[month];
-        cout << "pbl appel" << endl;
-        cout << "mois : " << newDate->month << endl;
-        cout << "jours : " << newDate->day << endl;
-        cout << "année : " << newDate->year << endl;
     }
     else{
         newDate->day -= nbDays;
@@ -144,7 +140,7 @@ int Date::Number_days_between(Date * dateSup)
 	return nb_days;
 }
 
-
+/*
 int main(){
     Date* d = new Date("2019-01-03 12:00:00");
     cout << d->GetDay() << "/" << d->GetMonth() << "/" << d->GetYear() << " " << d->GetHour() << ":" << d->GetMinutes() << ":" << d->GetSeconds()<< endl;
@@ -171,3 +167,4 @@ int main(){
     delete dateActuelle;
     return 0;
 }
+*/

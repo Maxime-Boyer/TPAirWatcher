@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 
         cout << " 1 - Identifier les capteur défaillant" << endl;
         cout << " 2 - Observer l'impact d'un AirCleaner" << endl;
-        cout << " 3 - Quitter air watcher" << endl;
+        cout << " autre - Quitter air watcher" << endl;
         cout << " Que voulez-vous faire ? (Entrer 1 ou 2) : ";
         cin >> choix;
         cout << endl;
@@ -64,6 +64,7 @@ int main(int argc, char* argv[]){
         else
         {
             cout << " >> Veuillez entrer un chiffre valide (1, 2 ou 3)" << endl;
+            choix = 3;
         }
     }
     return 0;
@@ -93,7 +94,7 @@ void identifierCapteurDefaillant()
         cin >> idCapteur;
         cout << " Rayon de comparaison : ";
         cin >> rayon;
-        capteurTraitement->identifierCapteurDefaillant(*(matosManager->GetCapteur(idCapteur)), rayon);
+        capteurTraitement->identifierCapteurDefaillant(matosManager->GetCapteur(idCapteur), rayon);
     }
     else if(choix == 2)
     {
@@ -103,7 +104,8 @@ void identifierCapteurDefaillant()
         listeCapteurs = matosManager->GetCapteurs();
         for(vector<Capteur*>::iterator itr = listeCapteurs.begin(); itr!= listeCapteurs.end(); itr++)
         { 
-            capteurTraitement->identifierCapteurDefaillant(*(*itr), rayon);
+            cout << "++ Incrémentation Capteur anaylé"<<endl;
+            capteurTraitement->identifierCapteurDefaillant(*itr, rayon);
         }
     }
     else
@@ -129,7 +131,7 @@ void observerImpactAirCleaner()
 
     cout << " 1 - ID de l'AirCleaner connu" << endl;
     cout << " 2 - Localisation connue" << endl;
-    cout << " Comment voulez-vous sidentifier l'AirCleaner ? (Entrer 1 ou 2) : ";
+    cout << " Comment voulez-vous identifier l'AirCleaner ? (Entrer 1 ou 2) : ";
     cin >> choix;
     cout << endl;
 

@@ -11,7 +11,8 @@ using namespace std;
 #define RAYON 6378.137
 
 GestionMateriel::GestionMateriel(){
-
+  this->MiseEnMemoireCapteur();
+  this->MiseEnMemoireAirCleaner();
 }
 
 GestionMateriel::~GestionMateriel(){
@@ -19,7 +20,7 @@ GestionMateriel::~GestionMateriel(){
 }
 void GestionMateriel::MiseEnMemoireAirCleaner(){
   ifstream fic;
-  fic.open("cleaners.csv");
+  fic.open("Administration/cleaners.csv");
 
   if(fic){
 
@@ -81,7 +82,7 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
 
 void GestionMateriel::MiseEnMemoireCapteur(){
     ifstream fic;
-    fic.open("sensors.csv");
+    fic.open("Administration/sensors.csv");
     
     if(fic){
 
@@ -166,7 +167,7 @@ vector<Capteur*> GestionMateriel::GetCapteurs(){
 Capteur* GestionMateriel::GetCapteur(int id){
   for(vector<Capteur*>::iterator itr = capteurs.begin(); itr!= capteurs.end(); itr++)
   { 
-      if((*itr)->GetIdCapteur() == id){
+      if((*itr)->GetSensorId() == id){
         return *itr;
       }
   }
@@ -201,6 +202,7 @@ AirCleaner* GestionMateriel::GetAirCleaner(int id){
   return nullptr;
 }
 
+/*
 int main(){
 
     GestionMateriel gestion;
@@ -210,4 +212,4 @@ int main(){
     cout << gestion.GetAirCleaner(45.333333,1.333333)->GetIdCleaner() << endl;
   
     return 0;
-}
+}*/
