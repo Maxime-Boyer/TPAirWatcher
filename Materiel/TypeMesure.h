@@ -40,13 +40,6 @@ TypeMesure ( const TypeMesure & unTypeMesure );
     //
     // Contrat :
     //
-
-TypeMesure ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 //----------------------------------------------------- Destructeur
 ~TypeMesure();
 

@@ -13,6 +13,7 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
 #include <ctime>
+#include "Date.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
@@ -34,7 +35,7 @@ public:
     
 //----------------------------------------------------- Constructeurs
 AirCleaner();
-AirCleaner(int,double,double,time_t);
+AirCleaner(int,double,double,Date *);
 
 AirCleaner( const AirCleaner & unAirCleaner );
     // Mode d'emploi (constructeur de copie) :
@@ -54,8 +55,7 @@ AirCleaner( const AirCleaner & unAirCleaner );
 int GetIdCleaner();
 double GetLatitude();
 double GetLongitude();
-time_t GetDateInstallation();
-
+Date * GetDateInstallation();
 
 //------------------------------------------------------------------ PRIVE
 
@@ -64,7 +64,7 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
     int idCleaner;
-    time_t dateInstallation;
+    Date * dateInstallation;
     double latitude;
     double longitude;
 };

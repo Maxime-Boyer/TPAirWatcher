@@ -66,9 +66,9 @@ int main(int argc, char* argv[])
 
     // RESUME DES TESTS
     cout << "##### FIN DES TESTS #####" << endl;
-    cout << "Nombres de tests effectues : " << nbTests << endl;
-    cout << "Nombres de tests reussis : " << nbPasse << endl;
-    cout << "Nombres de tests echoues : " << nbEchoue << endl;
+    cout << "Nombres de tests effectues : " << *nbTests << endl;
+    cout << "Nombres de tests reussis : " << *nbPasse << endl;
+    cout << "Nombres de tests echoues : " << *nbEchoue << endl;
 
     return 0;
 }
@@ -76,17 +76,17 @@ int main(int argc, char* argv[])
 
 void test(bool retour, string description, int* nbPasse, int* nbEchoue, int* nbTests)
 {
-    *nbTests++;
+    (*nbTests)++;
     cout << "- Test " << *nbTests << " : " << description << " ->";
     if(retour)
     {
         cout << "# passe" << endl;
-        *nbPasse++;
+        (*nbPasse)++;
     }
     else
     {
         cout << "# echoue" << endl;
-        *nbEchoue++;
+        (*nbEchoue)++;
     }
 }
 

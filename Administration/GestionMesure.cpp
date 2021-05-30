@@ -22,7 +22,7 @@ void GestionMesure::MiseEnMemoireMesures(){
     ifstream fic;
     fic.open("measurements.csv");
     
-    Date date;
+    Date * date = nullptr;
     int sensorId;
     string idTypeMesure;
     double value;
@@ -43,7 +43,7 @@ void GestionMesure::MiseEnMemoireMesures(){
     int i = 0;
 
     int actualId = -1;
-    Date actualDate;
+    Date* actualDate = nullptr;
     int nbDate = -1;
     
 
@@ -56,8 +56,7 @@ void GestionMesure::MiseEnMemoireMesures(){
 
           switch(i){
             case 0:
-                date = Date(partOfLine);
-
+                date = new Date(partOfLine);
                 break;
             case 1:
                 sensorId = stoi(partOfLine.substr(6,2)); 
@@ -69,8 +68,9 @@ void GestionMesure::MiseEnMemoireMesures(){
                 }
 
                 
-                if(date.equals(actualDate) == false){
-                    actualDate //A regarder plus tard
+                if(actualDate == nullptr || date->equals(*actualDate) == false){
+                    if(actualDate != nullptr)delete actualDate;
+                    actualDate = new Date(date);
                     nbDate++;
                     vector<Mesure*> v;
                     mesures[actualId].push_back(v);
@@ -90,8 +90,8 @@ void GestionMesure::MiseEnMemoireMesures(){
         }
 
         i = 0;
-        
-        mesures[actualId][nbDate].push_back(new Mesure(sensorId,idTypeMesure,value,&date));
+       
+        mesures[actualId][nbDate].push_back(new Mesure(sensorId,idTypeMesure,value,date));
     
     }
 }
@@ -101,18 +101,26 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
     return mesures[sensorId].back();
 }
 
+vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId){
+    vector<Mesure*> mesuresSensor = mesures[sensorId];
+    for(vector<Mesure*>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
+
+    }
+}
 vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
     return mesures[sensorId];
 }
 
+
 int main(){
     GestionMesure gestion;
     gestion.MiseEnMemoireMesures();
+
     vector<Mesure*> m = gestion.ObtenirDonneCapteurActuelle(0);
-    for(vector<Mesure*>::iterator itr = m.begin(); itr!= m.end(); itr++)
-    {
-        //cout << "Jour : " << (*itr)->GetDateMesure()->GetDay() << " Mois : " <<(*itr)->GetDateMesure()->GetMonth() << endl;
+    for(vector<Mesure*>::iterator itr = m.begin(); itr!= m.end(); itr++){
+
     }
+
     
    
 

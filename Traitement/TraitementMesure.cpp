@@ -13,6 +13,7 @@
 //-------------------------------------------------------- Include système
 #include <iostream>
 #include "TraitementMesure.h"
+#include "../Materiel/Date.h"
 #include "../Materiel/Mesure.h"
 #include "../Administration/GestionMateriel.h"
 #include "../Administration/GestionMesure.h"
@@ -96,29 +97,37 @@ TraitementMesure::~TraitementMesure(){
 }
 
 int ** TraitementMesure::CourbeAirCleaner(AirCleaner cleaner, int rayon){
-    Date dateDebutCourbe = cleaner.dateInstallation.operator-(1);
-    Date dateFinCourbe;
-    Date dateActuelle = time(0);
-    int indice = 0;
-    int ** courbe;
-    if(cleaner.dateDesinstallation != null)
-    {
-        dateFinCourbe <- cleaner.dateDesinstallation;
-    }else
+    Date * dateDebutCourbe = new Date(cleaner.GetDateInstallation()->operator-(1));
+    Date * dateBeginGraph = new Date(dateDebutCourbe);
     
-    dateFinCourbe = dateActuelle;
-    courbe = new int[dateFinCourbe-dateDebutCourbe][10];
-    for(int i = 0; i < dateFinCourbe-dateDebutCourbe; i++)
+
+    time_t actuel = time(0);
+    tm *ltm = localtime(&actuel);
+    Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+    Date * dateFinCourbe = new Date(dateActuelle);;
+
+    int nbDays = dateFinCourbe->number_days_between(dateDebutCourbe);
+    int indice = 0;
+    int ** courbe = new int[nbDays][10];
+    int currentDay = 0;
+
+    for(int i = 0; i < nbDays; i++)
     {
-        indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,dateDebutCourbe+i);
-        courbe[dateDebutCourbe.GetDay()+i][indice] = 1;
+        currentDay = dateBeginGraph->operator+(i);
+        indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,currentDay);
+        courbe[currentDay][indice] = 1;
     }
+
+    delete dateDebutCourbe;
+    delete dateActuelle;
+    delete dateBeginGraph;
+    delete dateFinCourbe;
     return courbe;
 
 }//------ Fin de Méthode
 
 
-int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, time_t date)
+int TraitementMesure::CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date date)
 {
     int o3 = 0;
     int so2 = 0;

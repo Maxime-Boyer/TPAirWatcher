@@ -1,9 +1,11 @@
 #include "Date.h"
 #include <iostream>
 #include <cmath>
+#include <ctime>
 using namespace std;
 
 #define ANNEE_BISSEXTILE(A) (!(A%4) && (A%100) || !(A%400))
+const int days_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 Date::Date(){
 
@@ -18,12 +20,21 @@ Date::~Date(){
 }
 
 Date::Date(string date){
-    day = stoi(date.substr(0,2));
-    month = stoi(date.substr(3,2));
-    year = stoi(date.substr(6,4));
-    hour = stoi(date.substr(12,2));
-    minutes = stoi(date.substr(15,2));
-    seconds = stoi(date.substr(18,2));
+    day = stoi(date.substr(8,2));
+    month = stoi(date.substr(5,2));
+    year = stoi(date.substr(0,4));
+    hour = stoi(date.substr(11,2));
+    minutes = stoi(date.substr(14,2));
+    seconds = stoi(date.substr(17,2));
+}
+
+Date::Date(int year, int month, int day, int hour, int minutes, int seconds){
+    this->day = day;
+    this->month = month;
+    this->year = year;
+    this->hour = hour;
+    this->minutes = minutes;
+    this->seconds = seconds;
 }
 
 Date::Date(const Date & copyDate){
@@ -33,6 +44,15 @@ Date::Date(const Date & copyDate){
     this->hour = copyDate.hour;
     this->minutes = copyDate.minutes;
     this->seconds = copyDate.seconds;
+}
+
+Date::Date(const Date * copyDate){
+    this->day = copyDate->day;
+    this->month = copyDate->month;
+    this->year = copyDate->year;
+    this->hour = copyDate->hour;
+    this->minutes = copyDate->minutes;
+    this->seconds = copyDate->seconds;
 }
 
 int Date::nombreJoursParMois(int mois)
@@ -68,23 +88,24 @@ int Date::nombreJoursParMois(int mois)
     }
 }
 
-Date Date::operator-(int nbDays)
+Date * Date::operator-(int nbDays)
 {
-    Date newDate = *this;
+    Date * newDate = new Date(this); 
+
     //On décide de faire des soustractions seulement sur des jours
-    if(newDate.day - nbDays <= 0)
+    if(newDate->day - nbDays <= 0)
     {
-        newDate.month--;
-        newDate.day -= nbDays;
-        if(newDate.month <= 0){ newDate.month = 12; newDate.year--;}
-        newDate.day += nombreJoursParMois(month);
+        newDate->month--;
+        newDate->day -= nbDays;
+        if(newDate->month <= 0){ newDate->month = 12; newDate->year--;}
+        newDate->day += nombreJoursParMois(month);
         cout << "pbl appel" << endl;
-        cout << "mois : " << newDate.month << endl;
-        cout << "jours : " << newDate.day << endl;
-        cout << "année : " << newDate.year << endl;
+        cout << "mois : " << newDate->month << endl;
+        cout << "jours : " << newDate->day << endl;
+        cout << "année : " << newDate->year << endl;
     }
     else{
-        newDate.day -= nbDays;
+        newDate->day -= nbDays;
     }
     return newDate;
 }
@@ -93,15 +114,16 @@ int Date::soustraireDate(Date * date)
 {
     if(year != date->year){
         if(month != date->month){
-            if()
+            //if()
         }
     }
 
-    int numero_jour( date d ) {
+    /*int numero_jour( date d ) {
     int  m = (d.mois + 9) % 12;   // jan->10 fev->11 mar->0 ... dec->9
     int  a = d.annee - (m >= 10); // mais soustraire 1 an en jan et fev
     return 1461*a/4 - a/100 + a/400 + (m*306 + 5)/10 + d.jour;
-}
+    
+    }*/
     
     return abs(day-date->day);
 }
@@ -112,9 +134,9 @@ int Date::operator+(int nbDays)
 {
     //On décide de faire des additions seulement sur des jours
     day += nbDays;
-    if(day > nombreJoursParMois(month))
+    if(day > days_month[month])
     {
-        day -= nombreJoursParMois(month);
+        day -= days_month[month];
         month++;
     }
     if(month > 12)
@@ -153,38 +175,60 @@ bool Date::equals(Date d){
     }
 }
 
-int nombre_jours( Date d1, Date d2)
+int Date::number_days_between(Date * dateSup)
 {
-	const int jours_mois[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	int nb_jours = 0;
-	int annee, mois;
+	//const int days_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int nb_days = 0;
+	int year, month;
 	
-	nb_jours += d2.day - d1.day; // Jours
+	nb_days += dateSup->GetDay() - this->GetDay(); // Jours
 	
-	if (d1.year == d2.year) {
-		for (month = d1.month ; month < d2.month ; month++)
-			nb_jours += (ANNEE_BISSEXTILE(d2.annee) && month == 2) ? 29 : jours_mois[month-1];
+    int d1Year = this->GetYear();
+    int d2Year = dateSup->GetYear();
+    int d1Month = this->GetMonth();
+    int d2Month = dateSup->GetMonth();
+
+	if (d1Year == d2Year) {
+		for (month = d1Month ; month < d2Month ; month++)
+			nb_days += (ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : days_month[month-1];
 	} else {
-		for (mois = d1.mois ; mois <= 12 ; mois++)
-			nb_jours += (ANNEE_BISSEXTILE(d1.annee) && mois == 2) ? 29 : jours_mois[mois-1]; // Mois de d1
-		for (mois = 1 ; mois < d2.mois ; mois++)
-			nb_jours += (ANNEE_BISSEXTILE(d2.annee) && mois == 2) ? 29 : jours_mois[mois-1]; // Mois de d2
-		for (annee = d1.annee+1 ; annee < d2.annee ; annee++)
-			nb_jours += (ANNEE_BISSEXTILE(annee)) ? 366 : 365; // Années
+		for (month = d1Month ; month <= 12 ; month++)
+			nb_days += (ANNEE_BISSEXTILE(d1Year) && month == 2) ? 29 : days_month[month-1]; // Mois de d1
+		for (month = 1 ; month < d2Month ; month++)
+			nb_days += (ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : days_month[month-1]; // Mois de d2
+		for (year = d1Year+1 ; year < d2Year ; year++)
+			nb_days += (ANNEE_BISSEXTILE(year)) ? 366 : 365; // Années
 	}
 	
-	return nb_jours;
+	return nb_days;
 }
 
-
+/**
 int main(){
     Date* d = new Date("03/01/2019  12:00:00");
     cout << d->GetDay() << "/" << d->GetMonth() << "/" << d->GetYear() << " " << d->GetHour() << ":" << d->GetMinutes() << ":" << d->GetSeconds()<< endl;
     Date* d2 = new Date("01/01/2019  12:00:00");
     //int ope4plus = d2->operator+(4);
-    Date d3 = d2->operator-(1);
+    Date * d3 = new Date(d2->operator-(1));
+    Date* d4 = new Date("18/07/2019  12:00:00");
     //int opeDmoins = d2->soustraireDate(d);
-    //cout << "on affiche d2 + 4 jours = " << ope4plus << endl;
-    cout << "on affiche d3 = " << d3.GetDay() << " mois " << d3.GetMonth() << " year " << d3.GetYear() << endl;
+    cout << "on affiche d2 + 4 jours = " << d2->operator+(4) << endl;
+    cout << "on affiche d3 = " << d3->GetDay() << " mois " << d3->GetMonth() << " year " << d3->GetYear() << endl;
+    cout << "nombre jour entre d et d4 : " << d->number_days_between(d4) << endl;
+    delete d;
+    delete d2;
+    delete d3;
+    delete d4;
+
+    time_t actuel = time(0);
+    tm *ltm = localtime(&actuel);
+
+
+    Date * dateActuelle = new Date(1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+    cout << dateActuelle->GetDay() << "/" << dateActuelle->GetMonth() << "/" << dateActuelle->GetYear() << " " << dateActuelle->GetHour() << ":" 
+    << dateActuelle->GetMinutes() << ":" << dateActuelle->GetSeconds() << endl;
+    
+    delete dateActuelle;
     return 0;
 }
+*/
