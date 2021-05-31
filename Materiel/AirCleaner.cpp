@@ -7,6 +7,7 @@ AirCleaner::AirCleaner(){
 AirCleaner::~AirCleaner(){
     delete dateInstallation;
     delete dateDesinstallation;
+
 }
 
 AirCleaner::AirCleaner(int id,double lat,double lon , Date * instal, Date* desinstal){

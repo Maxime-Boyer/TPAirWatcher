@@ -37,8 +37,15 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
+TraitementCapteur::TraitementCapteur()
+{
 
+}
 
+TraitementCapteur::~TraitementCapteur()
+{
+
+}
 
 bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon)
 {
@@ -109,9 +116,6 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         
         if(defaillance){
             cout << " !! Le capteur " << capteur->GetSensorId() << " est défaillant" << endl;
-        }
-        else{
-            cout << " >> Le capteur " << capteur->GetSensorId() << " n'est pas défaillant" << endl;
         }
 
         if(DEBUG) cout << "++ Sortie de méthode"<<endl;

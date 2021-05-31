@@ -16,19 +16,19 @@ GestionMateriel::GestionMateriel(){
 }
 
 GestionMateriel::~GestionMateriel(){
-
   /*
         IMPORTANT : delete objet de type GestionMesure et ensuite objet de type GestionMateriel
   */
 
-  /*for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
-  {
-    delete *iterateurCapteur;
+  for(auto capteur : capteurs){
+      delete capteur;
   }
-  for(vector<AirCleaner*>::iterator iterateurAirCleaner = cleaners.begin(); iterateurAirCleaner != cleaners.end(); iterateurAirCleaner++)
-  {
-    delete *iterateurAirCleaner;
-  }*/
+  for(auto cleaner : cleaners){
+    delete cleaner;
+  }
+  
+
+
 }
 
 void GestionMateriel::MiseEnMemoireAirCleaner(){
@@ -89,7 +89,8 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
           cleaners.push_back(new AirCleaner(id,latitude,longitude,start,stop));
         }
     }
-
+    fic.close();
+  
 }
 
 
@@ -147,6 +148,7 @@ void GestionMateriel::MiseEnMemoireCapteur(){
           capteurs.push_back(new Capteur(id,latitude,longitude));
         }
     }
+    fic.close();
 }
 
 vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double rayon)

@@ -36,9 +36,9 @@ public:
 
 //------------------------------------------------- Surcharge d'opérateurs
 //----------------------------------------------------- Constructeurs
-
+TraitementCapteur();
 //----------------------------------------------------- Destructeur
-
+~TraitementCapteur();
 //----------------------------------------------------- Méthodes publiques
 
 bool identifierCapteurDefaillant(Capteur * capteur, int rayon);

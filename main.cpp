@@ -40,12 +40,12 @@ int main(int argc, char* argv[]){
     GestionMesure* mesureManager = new GestionMesure();
 
     while(running)
-        {
+    {
         cout << " #####  BIENVENUE DANS AIR_WATCHER #####" << endl;
 
         cout << " 1 - Identifier les capteur défaillant" << endl;
         cout << " 2 - Observer l'impact d'un AirCleaner" << endl;
-        cout << " autre - Quitter air watcher" << endl;
+        cout << " Autre - Quitter air watcher" << endl;
         cout << " Que voulez-vous faire ? (Entrer 1 ou 2) : ";
         cin >> choix;
         cout << endl;
@@ -76,7 +76,6 @@ int main(int argc, char* argv[]){
 
     return 0;
 }
-
 /************************************************************ FONCTIONS */
 
 void identifierCapteurDefaillant(GestionMateriel* matosManager, GestionMesure * mesureManager)
@@ -147,7 +146,6 @@ void observerImpactAirCleaner(GestionMateriel* matosManager, GestionMesure* mesu
     //int longitude;
     int id;
     //int choix;
-    AirCleaner* aircleaner = new AirCleaner(); 
     TraitementMesure* mesureTraitement = new TraitementMesure();
     
     cout << " # OBSERVATION IMPACT AIR CLEANER #" << endl;
@@ -199,8 +197,7 @@ void observerImpactAirCleaner(GestionMateriel* matosManager, GestionMesure* mesu
         cout << " >> Choix invalide, retour au menu principal" << endl;
     }
     */
-    delete(aircleaner);
-    delete(mesureManager);
-    delete(matosManager); 
+
+    delete mesureTraitement;
     
 }

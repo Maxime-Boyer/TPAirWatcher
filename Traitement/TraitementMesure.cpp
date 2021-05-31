@@ -176,7 +176,7 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         cout << ">"<<endl;
         cout << endl;
 
-        
+
         delete dateDebutCourbe;
         delete dateActuelle;
         delete dateBeginGraph;
@@ -253,40 +253,6 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
                     }
                 }
 
-                /*for (int j = 0; j<4; j++)
-                {
-                    cout << "++     rentrer for mesure comparaison" << endl;
-                    if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
-                        o3 = o3 + mesures[j]->GetValue();
-                    }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
-                        so2 = so2 + mesures[j]->GetValue();
-                    }else if(mesures[j]->GetTypeMesureId().compare("NO2") == 0){
-                        no2 = no2 + mesures[j]->GetValue();
-                    }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
-                        pm10 = pm10 + mesures[j]->GetValue();
-                    }
-                }*/
-
-                //cout << "++   sorti boucle comparaison" << endl;
-            }
-            //makecout << "++ sorti boucle for sur les capteurs" << endl;
-            /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
-            {
-                vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
-                vector<Mesure> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurZoneIter);
-                nbMesure = nbMesure + 1;
-                for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
-                {
-                    if(mesuresIter->GetTypeMesureId().compare("O3") == 0){
-                        o3 = o3 + mesuresIter->GetValue();
-                    }else if(mesuresIter->GetTypeMesureId().compare("SO2") == 0){
-                        so2 = so2 + mesuresIter->GetValue();
-                    }else if(mesuresIter->GetTypeMesureId().compare("NO2") == 0){
-                        no2 = no2 + mesuresIter->GetValue();
-                    }else if(mesuresIter->GetTypeMesureId().compare("PM10") == 0){
-                        pm10 = pm10 + mesuresIter->GetValue();
-                    }
-                }*/
                 
             o3 = o3/nbMesure;
             so2 = so2/nbMesure;
@@ -299,7 +265,8 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
             indiceNo2 = CalculIndice(no2,400,tabIndiceAtmoNo2);
             indiceSo2 = CalculIndice(so2,500,tabIndiceAtmoSo2);
             indicePm10 = CalculIndice(pm10,80,tabIndiceAtmoPm10);
-            
+            }
+
             return max(indiceO3,max(indiceNo2,max(indiceSo2,indicePm10)));
         }
         else

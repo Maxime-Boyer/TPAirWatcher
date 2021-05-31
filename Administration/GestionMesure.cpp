@@ -16,21 +16,13 @@ GestionMesure::GestionMesure(){
 }
 
 GestionMesure::~GestionMesure(){
-
-    /*
-        IMPORTANT : delete objet de type GestionMesure et ensuite objet de type GestionMateriel
-    */
-    /*
-    for(vector<vector<vector<Mesure*>>>::iterator iterateurVectorVectorVectorMesure = mesures.begin(); iterateurVectorVectorVectorMesure != mesures.end(); iterateurVectorVectorVectorMesure++)
-    {
-        for(vector<vector<Mesure*>>::iterator iterateurVectorVectorMesure = iterateurVectorVectorVectorMesure.begin(); iterateurVectorVectorMesure != iterateurVectorVectorVectorMesure.end(); iterateurVectorVectorMesure++)
-        {
-            for(vector<Mesure*>::iterator iterateurVectorMesure = iterateurVectorVectorMesure.begin(); iterateurVectorMesure != iterateurVectorVectorMesure.end(); iterateurVectorMesure++)
-            {
-                delete *iterateurVectorMesure; 
+    for(auto inner : mesures){
+        for(auto inner_deep : inner){
+            for(auto mesure : inner_deep){
+                delete mesure;
             }
         }
-    }*/
+    }
 }
 
 void GestionMesure::MiseEnMemoireMesures(){
@@ -64,54 +56,53 @@ void GestionMesure::MiseEnMemoireMesures(){
     //Tant que le fichier n'est pas vide
     while(fic.eof() == 0){
         getline(fic,line);
+        if(fic.eof() == 0){
+            while ((pos = line.find(delimiter)) != std::string::npos) {
+            partOfLine = line.substr(0, pos);
 
-        while ((pos = line.find(delimiter)) != std::string::npos) {
-          partOfLine = line.substr(0, pos);
+            switch(i){
+                case 0:
+                    date = new Date(partOfLine);
+                    break;
+                case 1:
+                    sensorId = stoi(partOfLine.substr(6,2)); 
+                    if(sensorId != actualId){
+                        actualId = sensorId;
+                        vector<vector<Mesure*>> v;
+                        this->mesures.push_back(v);
+                        nbDate = -1;
+                    }
 
-          switch(i){
-            case 0:
-                date = new Date(partOfLine);
-                break;
-            case 1:
-                sensorId = stoi(partOfLine.substr(6,2)); 
-                if(sensorId != actualId){
-                    actualId = sensorId;
-                    vector<vector<Mesure*>> v;
-                    this->mesures.push_back(v);
-                    nbDate = -1;
-                }
+                    
+                    if(actualDate == nullptr || date->equals(*actualDate) == false){
+                        if(actualDate != nullptr);
+                        delete actualDate;
+                        actualDate = new Date(date);
+                        nbDate++;
+                        vector<Mesure*> v;
+                        this->mesures[actualId].push_back(v);
+                    }
+                    
+                    break;
+                case 2:
+                    idTypeMesure = partOfLine;
+                    break;
+                case 3: 
+                    value = atof(partOfLine.c_str());
+                    break;
 
-                
-                if(actualDate == nullptr || date->equals(*actualDate) == false){
-                    if(actualDate != nullptr);
-                    actualDate = new Date(date);
-                    nbDate++;
-                    vector<Mesure*> v;
-                    this->mesures[actualId].push_back(v);
-                }
-                 
-                break;
-            case 2:
-                idTypeMesure = partOfLine;
-                break;
-            case 3: 
-                value = atof(partOfLine.c_str());
-                break;
+            }
+            line.erase(0, pos + delimiter.length());
+            i++;
 
-          }
-          line.erase(0, pos + delimiter.length());
-          i++;
+            
+            }
 
-          
-        }
-
-        i = 0;
-
-        mesures[actualId][nbDate].push_back(new Mesure(sensorId,idTypeMesure,value,date));
-
+            i = 0;
+            mesures[actualId][nbDate].push_back(new Mesure(sensorId,idTypeMesure,value,date));
+            }
     }
-    delete date;
-    delete actualDate;
+    delete actualDate; 
 }
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
