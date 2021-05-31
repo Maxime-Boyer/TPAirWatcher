@@ -23,8 +23,8 @@
 using namespace std;
 
 /********************************************************* DECLARATIONS */
-void identifierCapteurDefaillant();
-void observerImpactAirCleaner();
+void identifierCapteurDefaillant(GestionMateriel*, GestionMesure*);
+void observerImpactAirCleaner(GestionMateriel*, GestionMesure*);
 
 /*********************************************************** CONSTANTES */
 
@@ -35,6 +35,9 @@ void observerImpactAirCleaner();
 int main(int argc, char* argv[]){
     int choix;
     bool running = true;
+
+    GestionMateriel* matosManager = new GestionMateriel();
+    GestionMesure* mesureManager = new GestionMesure();
 
     while(running)
         {
@@ -50,13 +53,13 @@ int main(int argc, char* argv[]){
     
         if(choix == 1)
         {
-            identifierCapteurDefaillant();
+            identifierCapteurDefaillant(matosManager,mesureManager);
         }
         else if(choix == 2)
         {
-            observerImpactAirCleaner();
+            observerImpactAirCleaner(matosManager,mesureManager);
         }
-        else if(choix == 3)
+        else if(choix > 2 || choix < 1)
         {
             cout << " #####  AU REVOIR ! #####" << endl;
             running = false;
@@ -72,13 +75,13 @@ int main(int argc, char* argv[]){
 
 /************************************************************ FONCTIONS */
 
-void identifierCapteurDefaillant()
+void identifierCapteurDefaillant(GestionMateriel* matosManager, GestionMesure * mesureManager)
 {
     int idCapteur;
     int choix;
     int rayon;
     TraitementCapteur* capteurTraitement = new TraitementCapteur();
-    GestionMateriel* matosManager = new GestionMateriel();
+    
 
     cout << " # IDENTIFICATION D'UN CAPTEUR DEFAILLANT #" << endl;
 
@@ -100,12 +103,19 @@ void identifierCapteurDefaillant()
     {
         cout << " Rayon de comparaison : ";
         cin >> rayon;
-        vector<Capteur*> listeCapteurs;
-        listeCapteurs = matosManager->GetCapteurs();
+        vector<Capteur*> listeCapteurs(matosManager->GetCapteurs());
         for(vector<Capteur*>::iterator itr = listeCapteurs.begin(); itr!= listeCapteurs.end(); itr++)
         { 
             cout << "++ Incrémentation Capteur anaylé"<<endl;
-            capteurTraitement->identifierCapteurDefaillant(*itr, rayon);
+            if(*itr != nullptr)
+            {
+                cout << "++ non nullptr capteur analysé; rayon : " << rayon << endl;
+                capteurTraitement->identifierCapteurDefaillant(*itr, rayon);
+            }
+            else{
+                cout << "++ nullptr capteur analysé" << endl;
+            }
+            
         }
     }
     else
@@ -116,7 +126,7 @@ void identifierCapteurDefaillant()
     
 }
 
-void observerImpactAirCleaner()
+void observerImpactAirCleaner(GestionMateriel* matosManager, GestionMesure* mesureManager)
 {
     int rayon;
     int latitude;
@@ -124,8 +134,7 @@ void observerImpactAirCleaner()
     int id;
     int choix;
     AirCleaner* aircleaner = new AirCleaner(); 
-    TraitementMesure* mesureManager = new TraitementMesure();
-    GestionMateriel* matosManager = new GestionMateriel(); 
+    TraitementMesure* mesureTraitement = new TraitementMesure();
     
     cout << " # OBSERVATION IMPACT AIR CLEANER #" << endl;
 
@@ -143,7 +152,15 @@ void observerImpactAirCleaner()
         cin >> id;
         cout << " Rayon : ";
         cin >> rayon;
-        mesureManager->CourbeAirCleaner(*(matosManager->GetAirCleaner(id)), rayon);
+        if(matosManager->GetAirCleaner(id) != nullptr)
+        {
+            mesureTraitement->CourbeAirCleaner(matosManager->GetAirCleaner(id), rayon, mesureManager,  matosManager);
+        }
+        else
+        {
+            cout << " !! AirCleaner inexistant" << endl;
+        }
+        
     }
     else if(choix == 2)
     {
@@ -153,7 +170,7 @@ void observerImpactAirCleaner()
         cin >> longitude;
         cout << " Rayon : ";
         cin >> rayon;
-        mesureManager->CourbeAirCleaner(*(matosManager->GetAirCleaner(latitude, longitude)), rayon);
+        mesureTraitement->CourbeAirCleaner((matosManager->GetAirCleaner(latitude, longitude)), rayon, mesureManager,  matosManager);
     }
     else
     {

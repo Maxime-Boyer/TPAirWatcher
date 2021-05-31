@@ -22,6 +22,7 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
   ifstream fic;
   fic.open("Administration/cleaners.csv");
 
+  cout << "<---- Mise en Mémoire air cleaner ----> " << endl << endl << endl;
   if(fic){
 
   }
@@ -61,9 +62,11 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
                 break;
               case 3:
                 start = new Date(partOfLine);
+                cout << "Date start : " << start->GetDay() << " " << start->GetMonth() << " " << start->GetYear() << endl;
                 break;
               case 4:
                 stop = new Date(partOfLine);
+                cout << "Date stop : " << stop->GetDay() << " " << stop->GetMonth() << " " << stop->GetYear() << endl;
                 break;
 
             }
@@ -76,6 +79,8 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
           cleaners.push_back(new AirCleaner(id,latitude,longitude,start,stop));
         }
     }
+
+    cout << "<---- Mise en Mémoire air cleaner ----> " << endl << endl << endl;
 }
 
 

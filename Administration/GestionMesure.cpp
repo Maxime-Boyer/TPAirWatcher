@@ -45,7 +45,6 @@ void GestionMesure::MiseEnMemoireMesures(){
     int actualId = -1;
     Date* actualDate = nullptr;
     int nbDate = -1;
-    
 
     //Tant que le fichier n'est pas vide
     while(fic.eof() == 0){
@@ -63,7 +62,7 @@ void GestionMesure::MiseEnMemoireMesures(){
                 if(sensorId != actualId){
                     actualId = sensorId;
                     vector<vector<Mesure*>> v;
-                    mesures.push_back(v);
+                    this->mesures.push_back(v);
                     nbDate = -1;
                 }
 
@@ -73,7 +72,7 @@ void GestionMesure::MiseEnMemoireMesures(){
                     actualDate = new Date(date);
                     nbDate++;
                     vector<Mesure*> v;
-                    mesures[actualId].push_back(v);
+                    this->mesures[actualId].push_back(v);
                 }
                  
                 break;
@@ -98,7 +97,14 @@ void GestionMesure::MiseEnMemoireMesures(){
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 {
-    return mesures[sensorId].back();
+    cout << "++ obtenir donnees capteur actuelle :" << endl;
+    return mesures[sensorId].back(); // SEGMENTATION FAULT ICI
+    /*for(vector<vector<vector<Mesure*>>>::iterator itr = mesures.begin()+sensorId; itr!= mesures.begin()+sensorId+1; itr++){
+        return (*itr).back();
+    }*/
+    // vector<vector<vector<Mesure*>>> mesures;
+    cout << "++ obtenir donnees capteur actuelle OK" << endl;
+
 }
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date){

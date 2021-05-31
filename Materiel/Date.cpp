@@ -59,7 +59,7 @@ Date * Date::operator-(int nbDays)
         newDate->month--;
         newDate->day -= nbDays;
         if(newDate->month <= 0){ newDate->month = 12; newDate->year--;}
-        newDate->day += days_month[month];
+        newDate->day += days_month[month-1];
     }
     else{
         newDate->day -= nbDays;
@@ -71,9 +71,9 @@ Date * Date::operator+(int nbDays)
 {
     //On décide de faire des additions seulement sur des jours
     day += nbDays;
-    if(day > days_month[month])
+    if(day > days_month[month-1])
     {
-        day -= days_month[month];
+        day -= days_month[month-1];
         month++;
     }
     if(month > 12)
@@ -127,14 +127,14 @@ int Date::Number_days_between(Date * dateSup)
 
 	if (d1Year == d2Year) {
 		for (month = d1Month ; month < d2Month ; month++)
-			nb_days += (ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : days_month[month-1];
+			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : 
 	} else {
 		for (month = d1Month ; month <= 12 ; month++)
-			nb_days += (ANNEE_BISSEXTILE(d1Year) && month == 2) ? 29 : days_month[month-1]; // Mois de d1
+			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d1Year) && month == 2) ? 29 : 
 		for (month = 1 ; month < d2Month ; month++)
-			nb_days += (ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : days_month[month-1]; // Mois de d2
+			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : 
 		for (year = d1Year+1 ; year < d2Year ; year++)
-			nb_days += (ANNEE_BISSEXTILE(year)) ? 366 : 365; // Années
+			nb_days += 365; // Années //(ANNEE_BISSEXTILE(year)) ? 366 : 
 	}
 	
 	return nb_days;
@@ -144,13 +144,13 @@ int Date::Number_days_between(Date * dateSup)
 int main(){
     Date* d = new Date("2019-01-03 12:00:00");
     cout << d->GetDay() << "/" << d->GetMonth() << "/" << d->GetYear() << " " << d->GetHour() << ":" << d->GetMinutes() << ":" << d->GetSeconds()<< endl;
-    Date* d2 = new Date("2019-01-01 12:00:00");
+    Date* d2 = new Date("2019-02-28 12:00:00");
     Date * d3 = new Date(d2->operator-(1));
     Date* d4 = new Date("2019-18-07 12:00:00");
 
-    cout << "on affiche d2 + 4 jours = " << d2->operator+(4) << endl;
-    cout << "on affiche d3 = " << d3->GetDay() << " mois " << d3->GetMonth() << " year " << d3->GetYear() << endl;
-    cout << "nombre jour entre d et d4 : " << d->Number_days_between(d4) << endl;
+    cout << "on affiche d2 + 1 jours = " << d2->operator+(1)->GetDay() << " " << d2->operator+(1)->GetMonth() << endl;
+    //cout << "on affiche d3 = " << d3->GetDay() << " mois " << d3->GetMonth() << " year " << d3->GetYear() << endl;
+    //cout << "nombre jour entre d et d4 : " << d->Number_days_between(d4) << endl;
     delete d;
     delete d2;
     delete d3;
