@@ -99,7 +99,7 @@ void identifierCapteurDefaillant(GestionMateriel* matosManager, GestionMesure * 
 
     cout << " 1 - Analyse d'un seul capteur" << endl;
     cout << " 2 - Analyse de l'ensemble des capteurs" << endl;
-    cout << " QUel type d'analyse voulez-vous lancer ? (Entrer 1 ou 2) : ";
+    cout << " Quel type d'analyse voulez-vous lancer ? (Entrer 1 ou 2) : ";
     cin >> choix;
     cout << endl;
 
@@ -113,11 +113,11 @@ void identifierCapteurDefaillant(GestionMateriel* matosManager, GestionMesure * 
         {
             if(capteurTraitement->identifierCapteurDefaillant(matosManager->GetCapteur(idCapteur), rayon,mesureManager,matosManager))
             {
-                cout << " >> Capteur " << idCapteur << " fonctionnel"<<endl;
+                cout << " >> Capteur " << idCapteur << " défaillant"<<endl;
             }
             else
             {
-                cout << " >> Capteur " << idCapteur << " défaillant"<<endl;
+                cout << " >> Capteur " << idCapteur << " fonctionnel"<<endl;
             }
         }
         else
