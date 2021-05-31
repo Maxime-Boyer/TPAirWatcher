@@ -20,28 +20,14 @@
 #include <vector>
 #include <ctime>
 #include <cstring>
+#include <algorithm>
 using namespace std;
-
-inline int max_indice( int a , int b , int c, int d) {
-    int max = a;
-    if(max < b){
-        max = b;
-    }
-    if(max < c){
-        max = c;
-    }
-    if(max < d)
-    {
-        max = d;
-    }
-    return max;
-}
 
 //------------------------------------------------------ Include personnel
 
 
 //------------------------------------------------------------- Constantes
-
+#define DEBUG false
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -102,6 +88,7 @@ TraitementMesure::TraitementMesure(){
     tabIndiceAtmoPm10[7] = 64;
     tabIndiceAtmoPm10[8] = 79;
 
+
 }
 
 TraitementMesure::~TraitementMesure(){
@@ -116,7 +103,6 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
 
         Date * dateDebutCourbe = new Date(cleaner->GetDateInstallation());
         Date * dateBeginGraph = new Date(dateDebutCourbe);
-        cout << "Date début : " << dateBeginGraph->GetDay() << " " << dateBeginGraph->GetMonth() << endl;
         
         //cout << "++ Declaration des dates de début OK" << endl;
         /*
@@ -135,15 +121,15 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         
         if(cleaner->GetDateDesinstallation() != nullptr){
             dateFinCourbe = new Date(cleaner->GetDateDesinstallation());
-            cout << "Date fin : " << dateFinCourbe->GetDay() << " " << dateFinCourbe->GetMonth() << endl;
         }
         else{
             dateFinCourbe = new Date(dateActuelle);
             
         }
         //cout << "++ Récupération date de fin OK" << endl;
-        /**
-        int nbDays = dateFinCourbe->Number_days_between(dateDebutCourbe);
+        
+        int nbDays = dateDebutCourbe->Number_days_between(dateFinCourbe);
+        
         int indice = 0;
         int indiceMax = 11;
         int ** courbe = new int*[nbDays];
@@ -160,7 +146,7 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         {
             currentDay = dateBeginGraph->operator+(1);
             cout << currentDay->GetDay() << " " << currentDay -> GetMonth() << " " << currentDay -> GetYear() << endl;
-            indice = this->CalculQualiteAirZone(cleaner.GetLatitude(),cleaner.GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel);
+            indice = this->CalculQualiteAirZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel);
             cout << "valeur de CalculQualiteAirZone : " << indice << endl;
             courbe[i][indice] = 1;
         }
@@ -199,11 +185,11 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
             delete[] courbe[i];
         }
         delete[] courbe;
-        */
+        
     }
     else
     {
-        cout << "++ Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
+        if(DEBUG) cout << "++ Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
     }
     //return void;
 
@@ -230,6 +216,7 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
     //cout << "++ Avant boucle for sur les capteurs"<< endl;
     for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
     {
+        cout << "Sensor"<<capteurDansLaZone[i] << endl;
         //cout << "++   rentrer boucle for sur les capteurs" << endl;
         vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
         //cout << "++   creation vector<mesure*> mesures" << endl;
@@ -299,34 +286,40 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
         }
         if(o3 <= tabIndiceAtmoO3[i])
         {
+            cout << tabIndiceAtmoO3[i] << endl;
             indiceO3 = i+1;
         }
         if(no2 >= 400){
-            indiceO3 = 10;
+            indiceNo2 = 10;
         }
         if(no2 <= tabIndiceAtmoNo2[i])
         {
+            cout << tabIndiceAtmoNo2[i] << endl;
             indiceNo2 = i+1;
         }
         if(so2 >= 500){
-            indiceO3 = 10;
+            indiceSo2 = 10;
         }
         if(so2 <= tabIndiceAtmoSo2[i])
         {
+            cout << tabIndiceAtmoSo2[i] << endl;
             indiceSo2= i+1;
         }
         if(pm10 >= 80){
-            indiceO3 = 10;
+            indicePm10 = 10;
         }
         if(pm10 <= tabIndiceAtmoPm10[i])
         {
+            cout << tabIndiceAtmoPm10[i] << endl;
             indicePm10 = i+1;
+            
         }
     }
     
     //cout << "Jour : " << date->GetDay() << " indiceO3 : " << indiceO3 << " indiceSo2 " << indiceSo2 << " indiceNo2 " << indiceNo2 << " indicePm10 " << indicePm10 << endl;
     
-    return max_indice(indiceO3,indiceNo2,indiceSo2,indicePm10);
+    cout << "max : " << max(indiceO3,max(indiceNo2,max(indiceSo2,indicePm10)))<< endl;
+    return 0;
 }
     
 

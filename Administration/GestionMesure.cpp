@@ -97,14 +97,7 @@ void GestionMesure::MiseEnMemoireMesures(){
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 {
-    cout << "++ obtenir donnees capteur actuelle :" << endl;
-    return mesures[sensorId].back(); // SEGMENTATION FAULT ICI
-    /*for(vector<vector<vector<Mesure*>>>::iterator itr = mesures.begin()+sensorId; itr!= mesures.begin()+sensorId+1; itr++){
-        return (*itr).back();
-    }*/
-    // vector<vector<vector<Mesure*>>> mesures;
-    cout << "++ obtenir donnees capteur actuelle OK" << endl;
-
+    return  mesures[sensorId].back();
 }
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date){

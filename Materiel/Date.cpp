@@ -126,17 +126,19 @@ int Date::Number_days_between(Date * dateSup)
     int d2Month = dateSup->GetMonth();
 
 	if (d1Year == d2Year) {
-		for (month = d1Month ; month < d2Month ; month++)
-			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : 
+		for (month = d1Month ; month < d2Month ; month++){
+            nb_days += days_month[month-1];//(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 :
+        } 
 	} else {
 		for (month = d1Month ; month <= 12 ; month++)
-			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d1Year) && month == 2) ? 29 : 
+			nb_days +=  days_month[month-1]; //(ANNEE_BISSEXTILE(d1Year) && month == 2) ? 29 : 
 		for (month = 1 ; month < d2Month ; month++)
-			nb_days += days_month[month-1-1]; //(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : 
+			nb_days += days_month[month-1]; //(ANNEE_BISSEXTILE(d2Year) && month == 2) ? 29 : 
 		for (year = d1Year+1 ; year < d2Year ; year++)
 			nb_days += 365; // Années //(ANNEE_BISSEXTILE(year)) ? 366 : 
 	}
 	
+    
 	return nb_days;
 }
 

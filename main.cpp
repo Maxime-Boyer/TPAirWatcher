@@ -106,10 +106,10 @@ void identifierCapteurDefaillant(GestionMateriel* matosManager, GestionMesure * 
         vector<Capteur*> listeCapteurs(matosManager->GetCapteurs());
         for(vector<Capteur*>::iterator itr = listeCapteurs.begin(); itr!= listeCapteurs.end(); itr++)
         { 
-            cout << "++ Incrémentation Capteur anaylé"<<endl;
+            //cout << "++ Incrémentation Capteur anaylé"<<endl;
             if(*itr != nullptr)
             {
-                cout << "++ non nullptr capteur analysé; rayon : " << rayon << endl;
+                //cout << "++ non nullptr capteur analysé; rayon : " << rayon << endl;
                 capteurTraitement->identifierCapteurDefaillant(*itr, rayon);
             }
             else{

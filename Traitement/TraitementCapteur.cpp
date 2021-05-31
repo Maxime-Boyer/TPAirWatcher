@@ -25,13 +25,9 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 
 //----------------------------------------------------------------- Macros
-#ifdef TRACES
-#define debug(expression) (cout << #expression << __FILE__ <<__LINE__<<endl)
-#else
-#define debug(expression) ((void)0)
-#endif
-//------------------------------------------------------------- Constantes
 
+//------------------------------------------------------------- Constantes
+#define DEBUG false
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -48,7 +44,7 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
 {
     if(capteur != nullptr && rayon > 1)
     {
-        cout << "++ Methode identifierCapteurDefaillant"<<endl;
+        if(DEBUG) cout << "++ Methode identifierCapteurDefaillant"<<endl;
         int o3CapteurDef = 0;
         int so2CapteurDef = 0;
         int no2CapteurDef = 0;
@@ -67,9 +63,9 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
         o3CapteurDef = mesuresAVerifier[0]->GetValue();
         so2CapteurDef = mesuresAVerifier[1]->GetValue();
         no2CapteurDef = mesuresAVerifier[2]->GetValue();
-        pm10CapteurDef = mesuresAVerifier[4]->GetValue();
+        pm10CapteurDef = mesuresAVerifier[3]->GetValue();
 
-        cout << "++ Debut boucle"<<endl;
+        if(DEBUG) cout << "++ Debut boucle"<<endl;
 
         vector <int> capteurDansLaZone (objetGestionMateriel->ObtenirIdCapteurZone(capteur->GetLatitude(),capteur->GetLongitude(),rayon));
         for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
@@ -90,7 +86,7 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
                 }
             }
         }
-        cout << "++ Fin boucle"<<endl;
+        if(DEBUG) cout << "++ Fin boucle"<<endl;
 
         double o3 = (o3Autre)/nbMesure;//-o3CapteurDef
         double so2 = (so2Autre)/nbMesure;//-so2CapteurDef
@@ -103,25 +99,29 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
         ecartType[3] = abs(pm10-pm10CapteurDef)/pm10;
 
         //Affichage de la défaillance du capteur
-        cout << "++ Affichage"<<endl;
-        int seuil = 10;
+        if(DEBUG) cout << "++ Affichage"<<endl;
+        double seuil = 0.3;
         bool defaillance = false;
         for(int i = 0; i<4; i++)
         {
             if(ecartType[i] > seuil){defaillance = true;}
         }
         if(defaillance){
-            cout << "Le capteur " << capteur->GetSensorId() << " est défaillant" << endl;
+            cout << " >> Le capteur " << capteur->GetSensorId() << " est défaillant" << endl;
         }
         else{
-            cout << "Le capteur " << capteur->GetSensorId() << " n'est pas défaillant" << endl;
+            if(DEBUG) cout << " >> Le capteur " << capteur->GetSensorId() << " n'est pas défaillant" << endl;
         }
-        cout << "++ Sortie de méthode"<<endl;
+
+        if(DEBUG) cout << "++ Sortie de méthode"<<endl;
+
         return ecartType;
     }
     else
     {
         cout << " >> Rayon trop petit ou capteur invalide"<<endl;
+        return 0;
+
     }
 }//------ Fin de Méthode
 
