@@ -9,6 +9,7 @@ using namespace std;
 #include "GestionMesure.h"
 #include "../Materiel/Date.h"
 #include "../Materiel/Mesure.h"
+#include "../Materiel/Capteur.h"
 
 GestionMesure::GestionMesure(){
     this->MiseEnMemoireMesures();
@@ -16,6 +17,20 @@ GestionMesure::GestionMesure(){
 
 GestionMesure::~GestionMesure(){
 
+    /*
+        IMPORTANT : delete objet de type GestionMesure et ensuite objet de type GestionMateriel
+    */
+    /*
+    for(vector<vector<vector<Mesure*>>>::iterator iterateurVectorVectorVectorMesure = mesures.begin(); iterateurVectorVectorVectorMesure != mesures.end(); iterateurVectorVectorVectorMesure++)
+    {
+        for(vector<vector<Mesure*>>::iterator iterateurVectorVectorMesure = iterateurVectorVectorVectorMesure.begin(); iterateurVectorVectorMesure != iterateurVectorVectorVectorMesure.end(); iterateurVectorVectorMesure++)
+        {
+            for(vector<Mesure*>::iterator iterateurVectorMesure = iterateurVectorVectorMesure.begin(); iterateurVectorMesure != iterateurVectorVectorMesure.end(); iterateurVectorMesure++)
+            {
+                delete *iterateurVectorMesure; 
+            }
+        }
+    }*/
 }
 
 void GestionMesure::MiseEnMemoireMesures(){
@@ -68,7 +83,7 @@ void GestionMesure::MiseEnMemoireMesures(){
 
                 
                 if(actualDate == nullptr || date->equals(*actualDate) == false){
-                    if(actualDate != nullptr)delete actualDate;
+                    if(actualDate != nullptr);
                     actualDate = new Date(date);
                     nbDate++;
                     vector<Mesure*> v;
@@ -86,13 +101,17 @@ void GestionMesure::MiseEnMemoireMesures(){
           }
           line.erase(0, pos + delimiter.length());
           i++;
+
+          
         }
 
         i = 0;
-       
+
         mesures[actualId][nbDate].push_back(new Mesure(sensorId,idTypeMesure,value,date));
-    
+
     }
+    delete date;
+    delete actualDate;
 }
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)

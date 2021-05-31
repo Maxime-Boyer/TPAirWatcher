@@ -13,18 +13,22 @@
 #include <ctime>
 #include <string>
 #include "../Traitement/TraitementMesure.h"
+#include "../Traitement/TraitementCapteur.h"
+#include "../Administration/GestionMateriel.h"
+#include "../Administration/GestionMesure.h"
+#include "../Materiel/Date.h"
 
 using namespace std;
 
 /********************************************************* DECLARATIONS */
 
 void test(bool retour, string description, int* nbPasse, int* nbEchoue, int* nbTest);
-bool tCalculQualiteAirZoneValide(time_t date);
-bool tCalculQualiteAirZoneNonCouverte(time_t date);
-bool tCalculQualiteAirZoneInvalide(time_t date);
+bool tCalculQualiteAirZoneValide(Date * date);
+bool tCalculQualiteAirZoneNonCouverte(Date * date);
+bool tCalculQualiteAirZoneInvalide(Date * date);
 bool tImpactAirCleaner();
-bool tCapteurDefaillant();
-
+bool tCapteurDefaillant(Capteur * capteur, int rayon);
+bool tCapteurNonDefaillant(Capteur  *capteur, int rayon);
 
 /*********************************************************** CONSTANTES */
 
@@ -46,15 +50,8 @@ int main(int argc, char* argv[])
 
     cout << "##### LANCEMENT DES TESTS #####" << endl;
 
-    // 
-    struct tm* dateF;
-    dateF->tm_year = 2020;
-    dateF->tm_mon = 01;
-    dateF->tm_mday = 01;
-    dateF->tm_hour = 12;
-    dateF->tm_min = 00;
-
-    time_t date = mktime(dateF);
+    Date * date = new Date(2019, 03, 01, 12, 00, 00);
+    GestionMateriel * objetGestionMateriel = new GestionMateriel;
 
     cout << "# Calcul qualite de l'air dans un rayon" << endl;
     test(tCalculQualiteAirZoneValide(date), "Zone couverte", nbPasse, nbEchoue, nbTests);
@@ -62,8 +59,8 @@ int main(int argc, char* argv[])
     test(tCalculQualiteAirZoneInvalide(date), "Zone innexistante", nbPasse, nbEchoue, nbTests);
     test(tImpactAirCleaner(), "Air cleaner existant", nbPasse, nbEchoue, nbTests);
     test(tImpactAirCleaner(), "Air cleaner inexistant", nbPasse, nbEchoue, nbTests);
-    test(tCapteurDefaillant(capteurOk), "Capteur fonctionnel",nbPasse, nbEchoue, nbTests);
-    test(tCapteurDefaillant(capteurKO), "Capteur défaillant",nbPasse, nbEchoue, nbTests);
+    test(tCapteurNonDefaillant(objetGestionMateriel->GetCapteur(10), 50), "Capteur fonctionnel",nbPasse, nbEchoue, nbTests);
+    test(tCapteurDefaillant(objetGestionMateriel->GetCapteur(0), 50), "Capteur défaillant",nbPasse, nbEchoue, nbTests);
 
 
 
@@ -95,39 +92,37 @@ void test(bool retour, string description, int* nbPasse, int* nbEchoue, int* nbT
 
 /********************************************************* DEFINITIONS */
 
-bool tCalculQualiteAirZoneValide(time_t date)
+bool tCalculQualiteAirZoneValide(Date * date)
 {
-    TraitementMesure traitement;
-
-    // Zone valide
-    if(traitement.CalculQualiteAirZone(44, 0.4, 100, date) == 50)
+    TraitementMesure* traitement = new TraitementMesure;
+    GestionMesure* mesure = new GestionMesure;     
+    GestionMateriel* materiel = new GestionMateriel;
+    if(traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel) == 50)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }    
+    return false;
 }
 
-bool tCalculQualiteAirZoneNonCouverte(time_t date)
+bool tCalculQualiteAirZoneNonCouverte(Date * date)
 {
-    TraitementMesure traitement;
-    if(traitement.CalculQualiteAirZone(0.1, 0.1, 2, date) == 0)
+    TraitementMesure* traitement = new TraitementMesure;
+    GestionMesure* mesure = new GestionMesure;     
+    GestionMateriel* materiel = new GestionMateriel;
+    if(traitement->CalculQualiteAirZone(0.1, 0.1, 2, date, mesure, materiel) == 0)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }    
+    return false;   
 }
 
-bool tCalculQualiteAirInvalide(time_t date)
+bool tCalculQualiteAirZoneInvalide(Date * date)
 {
-    TraitementMesure traitement;   
+    TraitementMesure* traitement = new TraitementMesure;
+    GestionMesure* mesure = new GestionMesure;     
+    GestionMateriel* materiel = new GestionMateriel;  
     /************* MODIFIER LES VALEURS POUR LES FAIRES CORRESPONDRE AVEC LES DATAS ***/
-    if(traitement.CalculQualiteAirZone(200, 200, 10, date) == -1)
+    if(traitement->CalculQualiteAirZone(200, 200, 10, date, mesure, materiel) == -1)
     {
         return true;
     }
@@ -143,14 +138,22 @@ bool tImpactAirCleaner()
     return false;
 }
 
-bool tCapteurDefaillant()
+bool tCapteurNonDefaillant(Capteur * capteur, int rayon)
 {
-    if(double * identifierCapteurDefaillant(Capteur capteur, int rayon))
+    TraitementCapteur* traitement = new TraitementCapteur;
+    if(*(traitement->identifierCapteurDefaillant(capteur, rayon)) < 2)
     {
         return true;
     }
-    else
+    return false;
+}
+
+bool tCapteurDefaillant(Capteur * capteur, int rayon)
+{
+    TraitementCapteur* traitement = new TraitementCapteur;
+    if(*(traitement->identifierCapteurDefaillant(capteur, rayon)) > 2)
     {
-        return false;
+        return true;
     }
+    return false;
 }

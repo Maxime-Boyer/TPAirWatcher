@@ -12,6 +12,7 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <stdlib.h>
 #include "TraitementMesure.h"
 #include "../Materiel/Date.h"
 #include "../Materiel/Mesure.h"
@@ -101,10 +102,10 @@ TraitementMesure::~TraitementMesure(){
 void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel){
     if(rayon > 0 && cleaner != nullptr && objetGestionMesure != nullptr && objetGestionMateriel != nullptr){
 
-        Date * dateDebutCourbe = new Date(cleaner->GetDateInstallation());
+        Date * dateDebutCourbe = new Date( (cleaner->GetDateInstallation())->operator-(7));
         Date * dateBeginGraph = new Date(dateDebutCourbe);
         
-        //cout << "++ Declaration des dates de début OK" << endl;
+        if(DEBUG) cout << "++ Declaration des dates de début OK" << endl;
         /*
         Dans le cas où les datasets sont à jour nous pouvons utiliser les lignes ci dessous.
         Or dans le cas de ce TP, nous sommes bloqués au 31 décembre 2019.
@@ -117,45 +118,45 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
 
         Date * dateActuelle = new Date(2019, 12, 31, 12, 00, 00); // Dernière date du fichier soit 31/12/2019 à midi
         Date * dateFinCourbe = nullptr;
-        //cout << "++ Initialisation des dates de fin OK" << endl;
+        if(DEBUG) cout << "++ Initialisation des dates de fin OK" << endl;
         
         if(cleaner->GetDateDesinstallation() != nullptr){
-            dateFinCourbe = new Date(cleaner->GetDateDesinstallation());
+            dateFinCourbe = new Date( (cleaner->GetDateDesinstallation())->operator+(7));
         }
         else{
             dateFinCourbe = new Date(dateActuelle);
             
         }
-        //cout << "++ Récupération date de fin OK" << endl;
+        if(DEBUG) cout << "++ Récupération date de fin OK" << endl;
         
         int nbDays = dateDebutCourbe->Number_days_between(dateFinCourbe);
         
         int indice = 0;
-        int indiceMax = 11;
+        int indiceMax = 10;
         int ** courbe = new int*[nbDays];
-        //cout << "++ Initialisation des variables 1 OK" << endl;
+        if(DEBUG) cout << "++ Initialisation des variables 1 OK" << endl;
         for (int i = 0; i < nbDays; i++)
         {
             courbe[i] = new int[indiceMax];
         }
-        //cout << "++ Declaration de la courbe OK" << endl;
+        if(DEBUG) cout << "++ Declaration de la courbe OK" << endl;
 
         Date * currentDay = nullptr;
 
         for(int i = 0; i < nbDays; i++)
         {
             currentDay = dateBeginGraph->operator+(1);
-            cout << currentDay->GetDay() << " " << currentDay -> GetMonth() << " " << currentDay -> GetYear() << endl;
             indice = this->CalculQualiteAirZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel);
-            cout << "valeur de CalculQualiteAirZone : " << indice << endl;
-            courbe[i][indice] = 1;
+            courbe[i][indice-1] = 1;
         }
-        //cout << "++ Remplissage de la courbe OK" << endl;
+        if(DEBUG) cout << "++ Remplissage de la courbe OK" << endl;
 
-        cout << " # Qualité de l'air moyene de la zone sur le temps de fonctionnement du cleaner" << endl;
+        cout << " # Qualité moyenne de l'air de la zone sur le temps de fonctionnement du cleaner" << endl;
         cout << "  ^" << endl;
         cout << "  |" << endl;
         for(int i = 0; i < indiceMax; i++){
+            //Le code qui suit est juste pour le visu
+            if(indiceMax-i != 10) cout << " ";
             cout << indiceMax-i << "|";
             for(int j = 0; j < nbDays; j++){
                 if(courbe[j][indiceMax-i-1] == 1){
@@ -195,131 +196,121 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
 
 }//------ Fin de Méthode
 
+int CalculIndice(int moyenneParticule,int max, int* tabIndice){
+    if(moyenneParticule >= max){
+        return 10;
+    }
+    else{
+        for(int i = 0; i < 9; i++){
+            if(moyenneParticule <= tabIndice[i]){
+                return i+1;
+            }
+        }
+    }
+
+    return -1;
+}
 
 int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
 {
-    double o3 = 0;
-    double so2 = 0;
-    double no2 = 0;
-    double pm10 = 0;
-    double nbMesure = 0;
-    double indiceO3 = 0;
-    double indiceSo2 = 0;
-    double indiceNo2 = 0;
-    double indicePm10 = 0;
-
-    cout << "Jour : " << date->GetDay() << endl; 
-    //cout << "++ Calcul Qualite Air Zone" << endl;
-    
-
-    vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(latitude,longitude,rayon);
-    //cout << "++ Avant boucle for sur les capteurs"<< endl;
-    for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
+    if(abs(latitude) < 90 && abs(longitude) < 180)
     {
-        cout << "Sensor"<<capteurDansLaZone[i] << endl;
-        //cout << "++   rentrer boucle for sur les capteurs" << endl;
-        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
-        //cout << "++   creation vector<mesure*> mesures" << endl;
-        nbMesure++;
-        
-        for (vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
-        {
-            //cout << "++     rentrer for mesure comparaison" << endl;
-            if((*mesuresIter)->GetTypeMesureId().compare("O3") == 0){
-                o3 = o3 + (*mesuresIter)->GetValue();
-            }else if((*mesuresIter)->GetTypeMesureId().compare("SO2") == 0){
-                so2 = so2 + (*mesuresIter)->GetValue();
-            }else if((*mesuresIter)->GetTypeMesureId().compare("NO2") == 0){
-                no2 = no2 + (*mesuresIter)->GetValue();
-            }else if((*mesuresIter)->GetTypeMesureId().compare("PM10") == 0){
-                pm10 = pm10 + (*mesuresIter)->GetValue();
-            }
-        }
+        double o3 = 0;
+        double so2 = 0;
+        double no2 = 0;
+        double pm10 = 0;
+        double nbMesure = 0;
+        double indiceO3 = 0;
+        double indiceSo2 = 0;
+        double indiceNo2 = 0;
+        double indicePm10 = 0;
 
-        /*for (int j = 0; j<4; j++)
-        {
-            cout << "++     rentrer for mesure comparaison" << endl;
-            if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
-                o3 = o3 + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
-                 so2 = so2 + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId().compare("NO2") == 0){
-                no2 = no2 + mesures[j]->GetValue();
-            }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
-                pm10 = pm10 + mesures[j]->GetValue();
-            }
-        }*/
+        if(DEBUG) cout << "++ Calcul Qualite Air Zone" << endl;
 
-        //cout << "++   sorti boucle comparaison" << endl;
-    }
-    //makecout << "++ sorti boucle for sur les capteurs" << endl;
-    /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
-    {
-        vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
-        vector<Mesure> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurZoneIter);
-        nbMesure = nbMesure + 1;
-        for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
-        {
-            if(mesuresIter->GetTypeMesureId().compare("O3") == 0){
-                o3 = o3 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().compare("SO2") == 0){
-                 so2 = so2 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().compare("NO2") == 0){
-                no2 = no2 + mesuresIter->GetValue();
-            }else if(mesuresIter->GetTypeMesureId().compare("PM10") == 0){
-                pm10 = pm10 + mesuresIter->GetValue();
-            }
-        }*/
-        
-    o3 = o3/nbMesure;
-    so2 = so2/nbMesure;
-    no2 = no2/nbMesure;
-    pm10 = pm10/nbMesure;
+        vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(latitude,longitude,rayon);
+        if(capteurDansLaZone.size() > 0)
+        {   
+            if(DEBUG) cout << "++ Avant boucle for sur les capteurs"<< endl;
+            for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
+            {
 
-    cout << "Jour : " << date->GetDay() << " o3 : " << o3 << " so2 " << so2 << " no2 " << no2 << " pm10 " << pm10 << endl;
+                if(DEBUG) cout << "++   rentrer boucle for sur les capteurs" << endl;
+                vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
+                if(DEBUG) cout << "++   creation vector<mesure*> mesures" << endl;
+                nbMesure++;
+                
+                for (vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
+                {
+                    if(DEBUG) cout << "++     rentrer for mesure comparaison" << endl;
+                    if((*mesuresIter)->GetTypeMesureId().compare("O3") == 0){
+                        o3 = o3 + (*mesuresIter)->GetValue();
+                    }else if((*mesuresIter)->GetTypeMesureId().compare("SO2") == 0){
+                        so2 = so2 + (*mesuresIter)->GetValue();
+                    }else if((*mesuresIter)->GetTypeMesureId().compare("NO2") == 0){
+                        no2 = no2 + (*mesuresIter)->GetValue();
+                    }else if((*mesuresIter)->GetTypeMesureId().compare("PM10") == 0){
+                        pm10 = pm10 + (*mesuresIter)->GetValue();
+                    }
+                }
+
+                /*for (int j = 0; j<4; j++)
+                {
+                    cout << "++     rentrer for mesure comparaison" << endl;
+                    if(mesures[j]->GetTypeMesureId().compare("O3") == 0){
+                        o3 = o3 + mesures[j]->GetValue();
+                    }else if(mesures[j]->GetTypeMesureId().compare("SO2") == 0){
+                        so2 = so2 + mesures[j]->GetValue();
+                    }else if(mesures[j]->GetTypeMesureId().compare("NO2") == 0){
+                        no2 = no2 + mesures[j]->GetValue();
+                    }else if(mesures[j]->GetTypeMesureId().compare("PM10") == 0){
+                        pm10 = pm10 + mesures[j]->GetValue();
+                    }
+                }*/
+
+                //cout << "++   sorti boucle comparaison" << endl;
+            }
+            //makecout << "++ sorti boucle for sur les capteurs" << endl;
+            /*for (vector<int>::iterator capteurZoneIter = capteurDansLaZone.begin(); capteurZoneIter != capteurDansLaZone.end(); capteurZoneIter++)
+            {
+                vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
+                vector<Mesure> mesures = objetGestionMesure->ObtenirDonneCapteurActuelle(capteurZoneIter);
+                nbMesure = nbMesure + 1;
+                for (vector<Mesure>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
+                {
+                    if(mesuresIter->GetTypeMesureId().compare("O3") == 0){
+                        o3 = o3 + mesuresIter->GetValue();
+                    }else if(mesuresIter->GetTypeMesureId().compare("SO2") == 0){
+                        so2 = so2 + mesuresIter->GetValue();
+                    }else if(mesuresIter->GetTypeMesureId().compare("NO2") == 0){
+                        no2 = no2 + mesuresIter->GetValue();
+                    }else if(mesuresIter->GetTypeMesureId().compare("PM10") == 0){
+                        pm10 = pm10 + mesuresIter->GetValue();
+                    }
+                }*/
+                
+            o3 = o3/nbMesure;
+            so2 = so2/nbMesure;
+            no2 = no2/nbMesure;
+            pm10 = pm10/nbMesure;
+                
+            //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
         
-    //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
-    for(int i = 0; i < 9; i++)
-    {
-        if(o3 >= 240){
-            indiceO3 = 10;
-        }
-        if(o3 <= tabIndiceAtmoO3[i])
-        {
-            cout << tabIndiceAtmoO3[i] << endl;
-            indiceO3 = i+1;
-        }
-        if(no2 >= 400){
-            indiceNo2 = 10;
-        }
-        if(no2 <= tabIndiceAtmoNo2[i])
-        {
-            cout << tabIndiceAtmoNo2[i] << endl;
-            indiceNo2 = i+1;
-        }
-        if(so2 >= 500){
-            indiceSo2 = 10;
-        }
-        if(so2 <= tabIndiceAtmoSo2[i])
-        {
-            cout << tabIndiceAtmoSo2[i] << endl;
-            indiceSo2= i+1;
-        }
-        if(pm10 >= 80){
-            indicePm10 = 10;
-        }
-        if(pm10 <= tabIndiceAtmoPm10[i])
-        {
-            cout << tabIndiceAtmoPm10[i] << endl;
-            indicePm10 = i+1;
+            indiceO3 = CalculIndice(o3,240,tabIndiceAtmoO3);
+            indiceNo2 = CalculIndice(no2,400,tabIndiceAtmoNo2);
+            indiceSo2 = CalculIndice(so2,500,tabIndiceAtmoSo2);
+            indicePm10 = CalculIndice(pm10,80,tabIndiceAtmoPm10);
             
+            return max(indiceO3,max(indiceNo2,max(indiceSo2,indicePm10)));
+        }
+        else
+        {
+            return -2;
         }
     }
-    
-    //cout << "Jour : " << date->GetDay() << " indiceO3 : " << indiceO3 << " indiceSo2 " << indiceSo2 << " indiceNo2 " << indiceNo2 << " indicePm10 " << indicePm10 << endl;
-    
-    cout << "max : " << max(indiceO3,max(indiceNo2,max(indiceSo2,indicePm10)))<< endl;
-    return 0;
+    else
+    {
+        return -1;
+    }
 }
     
 

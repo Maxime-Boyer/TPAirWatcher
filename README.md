@@ -23,11 +23,16 @@ Aucun autre logiciel ou paquet n'est nécessaire.
 # Lancement de l'application
 Pour lancer les parties implémentées de AirWatcher, il faut lancer le makefile principal. Pour se faire, il faut lancer un terminal à partir du répertoire principal puis exécuter les lignes suivantes :
     make
+    ./main
+
+Pensez à vérifier que le paramètre EXE du makefile soit de cette forme :
+    EXE = main
 
 # Tests
 Pour lancer la batterie de tests, exécutez le makefile du répertoir Tests. Vous pourrez voir le nombre de tests lancés, le nombre de tests réussis (passés) et le nombre de test échoués. Ces informations seront aussi affichées pour chaque tests.
-
+Pensez à vérifier que le paramètre EXE du makefile soit de cette forme :
+    EXE = tester
 Pour se faire ouvrez un terminal à partir du répertoire principal puis exécutez les lignes suivantes dans un terminal de commandes :
-    cd Tests
     make
+    ./tester
 

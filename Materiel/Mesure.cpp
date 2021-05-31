@@ -5,7 +5,7 @@ Mesure::Mesure(){
 }
 
 Mesure::~Mesure(){
-    
+    delete dateMesure;
 }
 
 Mesure::Mesure(int sensorId, string attributeId, double v, Date* time){

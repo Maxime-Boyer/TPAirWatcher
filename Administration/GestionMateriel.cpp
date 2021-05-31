@@ -17,7 +17,20 @@ GestionMateriel::GestionMateriel(){
 
 GestionMateriel::~GestionMateriel(){
 
+  /*
+        IMPORTANT : delete objet de type GestionMesure et ensuite objet de type GestionMateriel
+  */
+
+  /*for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
+  {
+    delete *iterateurCapteur;
+  }
+  for(vector<AirCleaner*>::iterator iterateurAirCleaner = cleaners.begin(); iterateurAirCleaner != cleaners.end(); iterateurAirCleaner++)
+  {
+    delete *iterateurAirCleaner;
+  }*/
 }
+
 void GestionMateriel::MiseEnMemoireAirCleaner(){
   ifstream fic;
   fic.open("Administration/cleaners.csv");
@@ -177,7 +190,6 @@ Capteur* GestionMateriel::GetCapteur(int id){
   return nullptr;
 }
 
-
 vector<AirCleaner*> GestionMateriel::GetCleaners(){
     return cleaners;
 }
@@ -185,8 +197,10 @@ vector<AirCleaner*> GestionMateriel::GetCleaners(){
 AirCleaner* GestionMateriel::GetAirCleaner(double lat, double lon){
   for(vector<AirCleaner*>::iterator itr = cleaners.begin(); itr!= cleaners.end(); itr++)
   { 
-      if((*itr)->GetLatitude() == lat && (*itr)->GetLongitude() == lon){
-        return *itr;
+      if((*itr)->GetLatitude() == lat){
+        if((*itr)->GetLongitude() == lon){
+          return *itr;
+        }
       }
   }
   return nullptr;

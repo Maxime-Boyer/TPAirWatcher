@@ -40,20 +40,20 @@ using namespace std;
 
 
 
-double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon)
+bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon)
 {
     if(capteur != nullptr && rayon > 1)
     {
         if(DEBUG) cout << "++ Methode identifierCapteurDefaillant"<<endl;
-        int o3CapteurDef = 0;
-        int so2CapteurDef = 0;
-        int no2CapteurDef = 0;
-        int pm10CapteurDef = 0;
-        int o3Autre = 0;
-        int so2Autre = 0;
-        int no2Autre = 0;
-        int pm10Autre = 0;
-        int nbMesure = 0;
+        double o3CapteurDef = 0;
+        double so2CapteurDef = 0;
+        double no2CapteurDef = 0;
+        double pm10CapteurDef = 0;
+        double o3Autre = 0;
+        double so2Autre = 0;
+        double no2Autre = 0;
+        double pm10Autre = 0;
+        double nbMesure = 0;
         
         GestionMesure * objetGestionMesure = new GestionMesure();
         GestionMateriel * objetGestionMateriel = new GestionMateriel();
@@ -88,10 +88,10 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
         }
         if(DEBUG) cout << "++ Fin boucle"<<endl;
 
-        double o3 = (o3Autre)/nbMesure;//-o3CapteurDef
-        double so2 = (so2Autre)/nbMesure;//-so2CapteurDef
-        double no2 = (no2Autre)/nbMesure;//-no2CapteurDef
-        double pm10 = (pm10Autre)/nbMesure;//-pm10CapteurDef
+        double o3 = (o3Autre - o3CapteurDef)/(nbMesure-1);
+        double so2 = (so2Autre - so2CapteurDef)/(nbMesure-1);
+        double no2 = (no2Autre - no2CapteurDef)/(nbMesure-1);
+        double pm10 = (pm10Autre - pm10CapteurDef)/(nbMesure-1);
         double * ecartType = new double[4];
         ecartType[0] = abs(o3-o3CapteurDef)/o3;
         ecartType[1] = abs(so2-so2CapteurDef)/so2;
@@ -100,29 +100,36 @@ double * TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int r
 
         //Affichage de la défaillance du capteur
         if(DEBUG) cout << "++ Affichage"<<endl;
-        double seuil = 0.3;
+        double seuil = 2;
         bool defaillance = false;
         for(int i = 0; i<4; i++)
         {
             if(ecartType[i] > seuil){defaillance = true;}
         }
+        
         if(defaillance){
-            cout << " >> Le capteur " << capteur->GetSensorId() << " est défaillant" << endl;
+            cout << " !! Le capteur " << capteur->GetSensorId() << " est défaillant" << endl;
         }
         else{
-            if(DEBUG) cout << " >> Le capteur " << capteur->GetSensorId() << " n'est pas défaillant" << endl;
+            cout << " >> Le capteur " << capteur->GetSensorId() << " n'est pas défaillant" << endl;
         }
 
         if(DEBUG) cout << "++ Sortie de méthode"<<endl;
 
-        return ecartType;
+        delete [] ecartType;
+        delete objetGestionMateriel;
+        delete objetGestionMesure;
+
+        return defaillance;
     }
     else
     {
         cout << " >> Rayon trop petit ou capteur invalide"<<endl;
-        return 0;
-
     }
+
+    
+    
+    return 0;
 }//------ Fin de Méthode
 
 //------------------------------------------------------------------ PRIVE
