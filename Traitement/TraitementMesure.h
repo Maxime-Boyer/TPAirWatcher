@@ -40,11 +40,6 @@ public:
 //----------------------------------------------------- Destructeur
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    ////
     TraitementMesure();
     ~TraitementMesure();
     void CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);

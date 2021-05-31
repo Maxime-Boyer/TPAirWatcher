@@ -40,21 +40,11 @@ public:
 GestionMateriel();
 
 GestionMateriel ( const GestionMateriel & unGestionMateriel );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
 
 //----------------------------------------------------- Destructeur
 ~GestionMateriel();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 vector<int> ObtenirIdCapteurZone(double lat, double lon, double rayon);
 Capteur* GetCapteur(int id);
 

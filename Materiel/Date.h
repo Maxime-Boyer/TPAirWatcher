@@ -36,10 +36,6 @@ Date();
 Date(string);
 
 Date(const Date & theDate);
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 Date(const Date * copyDate);
 Date(int year, int month, int day, int hour, int minutes, int seconds);
 
@@ -47,11 +43,6 @@ Date(int year, int month, int day, int hour, int minutes, int seconds);
 ~Date();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 int GetDay();
 int GetMonth();
 int GetYear();
@@ -59,8 +50,8 @@ int GetHour();
 int GetMinutes();
 int GetSeconds();
 bool equals(Date d);
-Date * operator-(int nbDays);
-Date * operator+(int nbDays);
+void operator-(int nbDays);
+void operator+(int nbDays);
 int Number_days_between(Date * dateSup);
 
 //------------------------------------------------------------------ PRIVE

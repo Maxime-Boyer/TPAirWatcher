@@ -38,20 +38,11 @@ AirCleaner();
 AirCleaner(int,double,double,Date *,Date*);
 
 AirCleaner( const AirCleaner & unAirCleaner );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
 //----------------------------------------------------- Destructeur
 ~AirCleaner();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 int GetIdCleaner();
 double GetLatitude();
 double GetLongitude();

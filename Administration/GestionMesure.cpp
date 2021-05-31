@@ -25,7 +25,11 @@ GestionMesure::~GestionMesure(){
     }
 }
 
-void GestionMesure::MiseEnMemoireMesures(){
+void GestionMesure::MiseEnMemoireMesures()
+/*
+  Ouverture du fichier measurements.csv pour récupérer et utiliser ses informations
+*/
+{
     ifstream fic;
     fic.open("Administration/measurements.csv");
     
@@ -147,25 +151,3 @@ vector<vector<Mesure*>> GestionMesure::ObtenirDonneCapteurPeriode(int sensorId, 
 vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
     return mesures[sensorId];
 }
-
-/*
-int main(){
-    GestionMesure gestion;
-    gestion.MiseEnMemoireMesures();
-
-    vector<Mesure*> m = gestion.ObtenirDonneCapteurJour(0,new Date("2019-01-27 12:00:00"));
-    if(m.size() != 0){
-        for(vector<Mesure*>::iterator itr = m.begin(); itr!= m.end(); itr++){
-            cout << (*(itr))->GetValue() << endl;
-        }
-    }
-    else{
-        cout << "Date éronée" << endl;
-    }
-    
-
-    
-   
-
-    return 0;
-}*/

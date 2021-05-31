@@ -36,20 +36,11 @@ Capteur();
 Capteur(int, double, double);
 
 Capteur ( const Capteur & unCapteur );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
 //----------------------------------------------------- Destructeur
 ~Capteur();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 int GetSensorId();
 
 double GetLatitude();

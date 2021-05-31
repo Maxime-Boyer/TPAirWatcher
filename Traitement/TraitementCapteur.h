@@ -41,7 +41,7 @@ TraitementCapteur();
 ~TraitementCapteur();
 //----------------------------------------------------- Méthodes publiques
 
-bool identifierCapteurDefaillant(Capteur * capteur, int rayon);
+bool identifierCapteurDefaillant(Capteur * capteur, int rayon,GestionMesure* gestionMesure, GestionMateriel* gestionMateriel);
 //------------------------------------------------------------------ PRIVE
 
 protected:

@@ -37,20 +37,12 @@ public:
 GestionMesure();
 
 GestionMesure ( const GestionMesure & unGestionMesure );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
 //----------------------------------------------------- Destructeur
 ~GestionMesure();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+
 vector<Mesure*> ObtenirDonneCapteurActuelle(int sensorId);
 vector<Mesure*> ObtenirDonneCapteurJour(int sensorId, Date * date);
 vector<vector<Mesure*>> ObtenirDonneCapteurPeriode(int sensorId, Date * start, Date* stop);

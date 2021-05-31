@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Ensemble  -  description
+                           TraitementMesure  -  description
                              -------------------
     début                : $DATE$
     copyright            : (C) $YEAR$ par $AUTHOR$
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <Ensemble> (fichier Ensemble.cpp) ------------
+//---------- Réalisation de la classe <TraitementMesure> (fichier TraitementMesure.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -32,12 +32,6 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Ensemble::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
 
 TraitementMesure::TraitementMesure(){
     tabIndiceAtmoO3 = new int[9];
@@ -99,10 +93,19 @@ TraitementMesure::~TraitementMesure(){
     delete[] tabIndiceAtmoPm10;
 }
 
-void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel){
+void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
+/*
+    Affichage d'une courbe montrant l'impact d'un air cleaner sur la qualité de l'air dans une zone.
+    Pour calculer l’impact d’un air cleaner : on calcule la qualité de l’air avant son installation 
+    et on la compare avec la qualité de l’air actuelle.
+*/
+{
     if(rayon > 0 && cleaner != nullptr && objetGestionMesure != nullptr && objetGestionMateriel != nullptr){
 
-        Date * dateDebutCourbe = new Date( (cleaner->GetDateInstallation())->operator-(7));
+    
+        Date * dateDebutCourbe = new Date(cleaner->GetDateInstallation());
+        dateDebutCourbe->operator-(7);
+
         Date * dateBeginGraph = new Date(dateDebutCourbe);
         
         if(DEBUG) cout << "++ Declaration des dates de début OK" << endl;
@@ -121,31 +124,33 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         if(DEBUG) cout << "++ Initialisation des dates de fin OK" << endl;
         
         if(cleaner->GetDateDesinstallation() != nullptr){
-            dateFinCourbe = new Date( (cleaner->GetDateDesinstallation())->operator+(7));
+            dateFinCourbe = new Date(cleaner->GetDateDesinstallation());
+            dateFinCourbe->operator+(7);
         }
         else{
             dateFinCourbe = new Date(dateActuelle);
             
         }
+
         if(DEBUG) cout << "++ Récupération date de fin OK" << endl;
-        
         int nbDays = dateDebutCourbe->Number_days_between(dateFinCourbe);
         
         int indice = 0;
         int indiceMax = 10;
         int ** courbe = new int*[nbDays];
+
         if(DEBUG) cout << "++ Initialisation des variables 1 OK" << endl;
         for (int i = 0; i < nbDays; i++)
         {
-            courbe[i] = new int[indiceMax];
+            courbe[i] = new int[indiceMax]{0};
         }
-        if(DEBUG) cout << "++ Declaration de la courbe OK" << endl;
 
-        Date * currentDay = nullptr;
+        if(DEBUG) cout << "++ Declaration de la courbe OK" << endl;
+        Date * currentDay = new Date(dateBeginGraph);
 
         for(int i = 0; i < nbDays; i++)
         {
-            currentDay = dateBeginGraph->operator+(1);
+            currentDay->operator+(1);
             indice = this->CalculQualiteAirZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel);
             courbe[i][indice-1] = 1;
         }
@@ -181,20 +186,20 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         delete dateActuelle;
         delete dateBeginGraph;
         delete dateFinCourbe;
+        delete currentDay;
         for (int i = 0; i < nbDays; i++)
         {
             delete[] courbe[i];
         }
         delete[] courbe;
-        
+    
     }
     else
     {
         if(DEBUG) cout << "++ Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
     }
-    //return void;
 
-}//------ Fin de Méthode
+}
 
 int CalculIndice(int moyenneParticule,int max, int* tabIndice){
     if(moyenneParticule >= max){
@@ -212,6 +217,10 @@ int CalculIndice(int moyenneParticule,int max, int* tabIndice){
 }
 
 int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
+/*
+    Calcul de la qualité de l'air pour une zone repérée par ses coordonnées et délimitée 
+    par un rayon.
+*/
 {
     if(abs(latitude) < 90 && abs(longitude) < 180)
     {
@@ -252,20 +261,20 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
                         pm10 = pm10 + (*mesuresIter)->GetValue();
                     }
                 }
+            }
 
-                
+            
             o3 = o3/nbMesure;
             so2 = so2/nbMesure;
             no2 = no2/nbMesure;
             pm10 = pm10/nbMesure;
-                
+
             //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
         
             indiceO3 = CalculIndice(o3,240,tabIndiceAtmoO3);
             indiceNo2 = CalculIndice(no2,400,tabIndiceAtmoNo2);
             indiceSo2 = CalculIndice(so2,500,tabIndiceAtmoSo2);
             indicePm10 = CalculIndice(pm10,80,tabIndiceAtmoPm10);
-            }
 
             return max(indiceO3,max(indiceNo2,max(indiceSo2,indicePm10)));
         }
@@ -280,8 +289,6 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
     }
 }
     
-
-
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées
     

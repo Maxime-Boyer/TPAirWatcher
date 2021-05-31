@@ -36,19 +36,11 @@ TypeMesure();
 TypeMesure(int, string, string);
 
 TypeMesure ( const TypeMesure & unTypeMesure );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
+
 //----------------------------------------------------- Destructeur
 ~TypeMesure();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 string GetUnit();
 
 string GetDescription();

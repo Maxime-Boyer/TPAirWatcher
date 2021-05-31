@@ -39,21 +39,11 @@ Mesure();
 Mesure(int, string, double, Date *);
 
 Mesure ( const Mesure & unMesure );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
 
 //----------------------------------------------------- Destructeur
 ~Mesure();
 
 //----------------------------------------------------- Méthodes publiques
- // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 int GetSensorId();
 
 string GetTypeMesureId();

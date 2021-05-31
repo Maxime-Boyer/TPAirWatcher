@@ -49,9 +49,9 @@ Date::Date(const Date * copyDate){
     this->seconds = copyDate->seconds;
 }
 
-Date * Date::operator-(int nbDays)
+void Date::operator-(int nbDays)
 {
-    Date * newDate = new Date(this); 
+    /*Date * newDate = new Date(this); 
 
     //On décide de faire des soustractions seulement sur des jours
     if(newDate->day - nbDays <= 0)
@@ -64,10 +64,23 @@ Date * Date::operator-(int nbDays)
     else{
         newDate->day -= nbDays;
     }
-    return newDate;
+    return newDate;*/
+
+    //On décide de faire des soustractions seulement sur des jours
+    
+    if(day - nbDays <= 0)
+    {
+        month--;
+        day -= nbDays;
+        if(month <= 0){ month = 12; year--;}
+        day += days_month[month-1];
+    }
+    else{
+        day -= nbDays;
+    }
 }
 
-Date * Date::operator+(int nbDays)
+void Date::operator+(int nbDays)
 {
     //On décide de faire des additions seulement sur des jours
     day += nbDays;
@@ -80,8 +93,7 @@ Date * Date::operator+(int nbDays)
     {
         year++;
         month = 1;
-    }
-    return this; 
+    } 
 }
 
 int Date::GetDay(){

@@ -21,7 +21,7 @@ GestionMateriel::~GestionMateriel(){
   */
 
   for(auto capteur : capteurs){
-      delete capteur;
+    delete capteur;
   }
   for(auto cleaner : cleaners){
     delete cleaner;
@@ -31,7 +31,11 @@ GestionMateriel::~GestionMateriel(){
 
 }
 
-void GestionMateriel::MiseEnMemoireAirCleaner(){
+void GestionMateriel::MiseEnMemoireAirCleaner()
+/*
+  Ouverture du fichier cleaners.csv pour récupérer et utiliser ses informations
+*/
+{
   ifstream fic;
   fic.open("Administration/cleaners.csv");
 
@@ -95,7 +99,11 @@ void GestionMateriel::MiseEnMemoireAirCleaner(){
 
 
 
-void GestionMateriel::MiseEnMemoireCapteur(){
+void GestionMateriel::MiseEnMemoireCapteur()
+/*
+  Ouverture du fichier sensors.csv pour récupérer et utiliser ses informations
+*/
+{
     ifstream fic;
     fic.open("Administration/sensors.csv");
     
@@ -152,6 +160,9 @@ void GestionMateriel::MiseEnMemoireCapteur(){
 }
 
 vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double rayon)
+/*
+  Renvoie les Id de tous les capteurs présent dans une zone définie par sa locatlisation et un rayon
+*/
 {
   vector<int> capteurDansLaZone;
   double distanceCapteur;
@@ -218,15 +229,3 @@ AirCleaner* GestionMateriel::GetAirCleaner(int id){
 
   return nullptr;
 }
-
-/*
-int main(){
-
-    GestionMateriel gestion;
-    gestion.MiseEnMemoireCapteur();
-    gestion.MiseEnMemoireAirCleaner();
-
-    cout << gestion.GetAirCleaner(45.333333,1.333333)->GetIdCleaner() << endl;
-  
-    return 0;
-}*/

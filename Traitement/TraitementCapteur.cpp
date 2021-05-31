@@ -31,11 +31,6 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type TraitementCapteur::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
 TraitementCapteur::TraitementCapteur()
 {
@@ -47,7 +42,11 @@ TraitementCapteur::~TraitementCapteur()
 
 }
 
-bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon)
+bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon, GestionMesure* gestionMesure, GestionMateriel* gestionMateriel)
+/*
+    On définie un capteur comme défaillant lorsque ses mesures s'écartent trop des
+    mesures des capteurs à proximité.
+*/
 {
     if(capteur != nullptr && rayon > 1)
     {
@@ -60,13 +59,9 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         double so2Autre = 0;
         double no2Autre = 0;
         double pm10Autre = 0;
-        double nbMesure = 0;
+        double nbMesure = 0;        
         
-        GestionMesure * objetGestionMesure = new GestionMesure();
-        GestionMateriel * objetGestionMateriel = new GestionMateriel();
-        
-        
-        vector<Mesure*> mesuresAVerifier(objetGestionMesure->ObtenirDonneCapteurActuelle(capteur->GetSensorId()));
+        vector<Mesure*> mesuresAVerifier(gestionMesure->ObtenirDonneCapteurActuelle(capteur->GetSensorId()));
         o3CapteurDef = mesuresAVerifier[0]->GetValue();
         so2CapteurDef = mesuresAVerifier[1]->GetValue();
         no2CapteurDef = mesuresAVerifier[2]->GetValue();
@@ -74,10 +69,10 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
 
         if(DEBUG) cout << "++ Debut boucle"<<endl;
 
-        vector <int> capteurDansLaZone (objetGestionMateriel->ObtenirIdCapteurZone(capteur->GetLatitude(),capteur->GetLongitude(),rayon));
+        vector <int> capteurDansLaZone (gestionMateriel->ObtenirIdCapteurZone(capteur->GetLatitude(),capteur->GetLongitude(),rayon));
         for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
         {
-            vector <Mesure*> mesures (objetGestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
+            vector <Mesure*> mesures (gestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
             nbMesure++;
             for(vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
             //for(int j = 0; j<4; j++)
@@ -105,9 +100,9 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         ecartType[2] = abs(no2-no2CapteurDef)/no2;
         ecartType[3] = abs(pm10-pm10CapteurDef)/pm10;
 
-        //Affichage de la défaillance du capteur
+        //Affichage de la défaillance du capteur en fonction d'un seuil choisi
         if(DEBUG) cout << "++ Affichage"<<endl;
-        double seuil = 2;
+        double seuil = 1;
         bool defaillance = false;
         for(int i = 0; i<4; i++)
         {
@@ -121,9 +116,7 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         if(DEBUG) cout << "++ Sortie de méthode"<<endl;
 
         delete [] ecartType;
-        delete objetGestionMateriel;
-        delete objetGestionMesure;
-
+    
         return defaillance;
     }
     else
@@ -134,7 +127,7 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
     
     
     return 0;
-}//------ Fin de Méthode
+}
 
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées
