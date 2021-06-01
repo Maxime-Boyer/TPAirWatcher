@@ -96,8 +96,7 @@ bool tCalculQualiteAirZoneValide(Date * date)
     GestionMesure* mesure = new GestionMesure;     
     GestionMateriel* materiel = new GestionMateriel;
 
-    cout << traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel) << endl;
-    if(traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel) == 8)
+    if(traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel) == 7)
     {
         return true;
     }

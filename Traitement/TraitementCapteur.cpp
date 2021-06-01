@@ -113,7 +113,7 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         //Affichage de la défaillance du capteur en fonction d'un seuil choisi
         if(DEBUG) cout << "++ Affichage"<<endl;
         //Choix du seuil arbitraire
-        double seuil = 1;
+        double seuil = 2;
         bool defaillance = false;
         for(int i = 0; i<4; i++)
         {

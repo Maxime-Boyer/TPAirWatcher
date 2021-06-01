@@ -134,8 +134,13 @@ void observerQualiteAir(GestionMateriel* matosManager, GestionMesure* mesureMana
     cout << endl;
     if(rayon == -1) return;
 
+    cout << "Entrez la date (YYYY-MM-DD) " << endl;
+    string date;
+    cin >> date;
+    date += " 12:00:00";
+
     TraitementMesure * traitementMesure = new TraitementMesure();
-    Date * dateActuelle = new Date(2019, 12, 31, 12, 00, 00); 
+    Date * dateActuelle = new Date(date); 
 
     int indice = traitementMesure->CalculQualiteAirZone(latitude,longitude,rayon,dateActuelle,mesureManager,matosManager);
     cout << "L'indice de l'air dans cette zone vaut : " << indice << endl << endl;
