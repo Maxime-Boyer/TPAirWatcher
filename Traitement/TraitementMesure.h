@@ -42,7 +42,7 @@ public:
 //----------------------------------------------------- Méthodes publiques
     TraitementMesure();
     ~TraitementMesure();
-    void CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);
+    bool CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);
     int CalculQualiteAirZone(double latitude, double longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel, vector<int>);
 //------------------------------------------------------------------ PRIVE
 

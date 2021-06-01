@@ -1,5 +1,5 @@
 EFFACE = clean
-EXE = main
+EXE = tester
 CCFLAGS = -g
 g++Linux = -ansi -pedantic -Wall -std=c++11
 RM = @rm

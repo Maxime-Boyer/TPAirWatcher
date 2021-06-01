@@ -135,7 +135,7 @@ vector<vector<Mesure*>> GestionMesure::ObtenirDonneCapteurPeriode(int sensorId, 
    /*
     Cette méthode n'est pas utilisée dans le projet 
     Mais on pourrait l'utiliser pour par exemple récupérer toutes les données d'un coup 
-    sur toute la période de la courbe
+    sur toute la période de la courbe ce qui serait surement plus optimisé mais pas fait par manque de temps
    */
    vector<vector<Mesure*>> mesuresSensor = mesures[sensorId]; 
    vector<vector<Mesure*>> mesuresToReturn; 

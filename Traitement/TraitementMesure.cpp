@@ -49,7 +49,7 @@ TraitementMesure::~TraitementMesure(){
 
 }
 
-void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
+bool TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
 /*
     Affichage d'une courbe montrant l'impact d'un air cleaner sur la qualité de l'air dans une zone.
     Pour calculer l’impact d’un air cleaner : on calcule la qualité de l’air avant son installation 
@@ -157,11 +157,12 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
             delete[] courbe[i];
         }
         delete[] courbe;
-    
+        return true;
     }
     else
     {
         cout << "Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
+        return false;
     }
 
 }
