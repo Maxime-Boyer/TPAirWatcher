@@ -1,5 +1,3 @@
-# Version 25/05/2021
-
 # Contexte
 Dans le cadre de la matière Génie Logiciel et modélisation UML des 3IF de l'INSA de Lyon, nous implémentons deux fonctionalités principales du sujet AirWatcher. Notre équipe est composée de Louis Tricot, Loann Largeron, Nathan Sadoun, Maxime Boyer et Julien Bouvier.
 Voici donc notre TP 3IF INSA Lyon nommé Air Watcher.
