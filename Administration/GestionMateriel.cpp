@@ -157,23 +157,25 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
 */
 {
   vector<int> capteurDansLaZone;
-  double distanceCapteur;
-  double latRadian = lat*0.01745;
-  double lonRadian = lon*0.01745;
+    if(rayon > 0 && abs(latitude) < 90 && abs(longitude) < 180){
+    double distanceCapteur;
+    double latRadian = lat*0.01745;
+    double lonRadian = lon*0.01745;
 
-  //Pour chaque capteur 
-  for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
-  {
-    
-    double latRadian2 = (*iterateurCapteur)->GetLatitude()*0.01745;
-    double lonRadian2 = (*iterateurCapteur)->GetLongitude()*0.01745;
+    //Pour chaque capteur 
+    for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
+    {
+      
+      double latRadian2 = (*iterateurCapteur)->GetLatitude()*0.01745;
+      double lonRadian2 = (*iterateurCapteur)->GetLongitude()*0.01745;
 
-    //On calcule la distance entre le capteur et le point de référence 
-    distanceCapteur= acos(sin(latRadian)*sin(latRadian2)+cos(latRadian)*cos(latRadian2)*cos(lonRadian2-lonRadian));
-    distanceCapteur = RAYON*distanceCapteur;
+      //On calcule la distance entre le capteur et le point de référence 
+      distanceCapteur= acos(sin(latRadian)*sin(latRadian2)+cos(latRadian)*cos(latRadian2)*cos(lonRadian2-lonRadian));
+      distanceCapteur = RAYON*distanceCapteur;
 
-    if(distanceCapteur < rayon)
-      capteurDansLaZone.push_back((*iterateurCapteur)->GetSensorId());
+      if(distanceCapteur < rayon)
+        capteurDansLaZone.push_back((*iterateurCapteur)->GetSensorId());
+    }
   }
   
   return capteurDansLaZone;

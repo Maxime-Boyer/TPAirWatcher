@@ -117,11 +117,13 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date){
     
-    vector<vector<Mesure*>> mesuresSensor = mesures[sensorId];
+    if(sensorId >= 0 && sensorId < 100 && date->GetYear() == 2019){
+        vector<vector<Mesure*>> mesuresSensor = mesures[sensorId];
 
-    for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
-        if( ((*(itr))[0])->GetDateMesure()->equals(*date)){
-            return *(itr);
+        for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
+            if( ((*(itr))[0])->GetDateMesure()->equals(*date)){
+                return *(itr);
+            }
         }
     }
 

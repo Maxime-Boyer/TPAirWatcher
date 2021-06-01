@@ -159,7 +159,7 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
     }
     else
     {
-        if(DEBUG) cout << "++ Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
+        cout << "Paramètres invalides dans la méthode CourbeAirCleaner" << endl;
     }
 
 }
