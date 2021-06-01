@@ -157,7 +157,7 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
 */
 {
   vector<int> capteurDansLaZone;
-    if(rayon > 0 && abs(latitude) < 90 && abs(longitude) < 180){
+    if(rayon > 0 && abs(lat) < 90 && abs(lon) < 180){
     double distanceCapteur;
     double latRadian = lat*0.01745;
     double lonRadian = lon*0.01745;

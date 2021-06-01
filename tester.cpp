@@ -95,8 +95,8 @@ bool tCalculQualiteAirZoneValide(Date * date)
     TraitementMesure* traitement = new TraitementMesure;
     GestionMesure* mesure = new GestionMesure;     
     GestionMateriel* materiel = new GestionMateriel;
-
-    if(traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel) == 7)
+    vector<int> v;
+    if(traitement->CalculQualiteAirZone(44, 0.4, 100, date, mesure, materiel,v) == 7)
     {
         return true;
     }
@@ -108,8 +108,8 @@ bool tCalculQualiteAirZoneNonCouverte(Date * date)
     TraitementMesure* traitement = new TraitementMesure;
     GestionMesure* mesure = new GestionMesure;     
     GestionMateriel* materiel = new GestionMateriel;
-
-    if(traitement->CalculQualiteAirZone(0, 0, 1, date, mesure, materiel) == -2)
+    vector<int> v;
+    if(traitement->CalculQualiteAirZone(0, 0, 1, date, mesure, materiel,v) == -2)
     {
         return true;
     }
@@ -121,8 +121,8 @@ bool tCalculQualiteAirZoneInvalide(Date * date)
     TraitementMesure* traitement = new TraitementMesure;
     GestionMesure* mesure = new GestionMesure;     
     GestionMateriel* materiel = new GestionMateriel;  
-    
-    if(traitement->CalculQualiteAirZone(200, 200, 10, date, mesure, materiel) == -1)
+    vector<int> v;
+    if(traitement->CalculQualiteAirZone(200, 200, 10, date, mesure, materiel,v) == -1)
     {
         return true;
     }

@@ -142,7 +142,8 @@ void observerQualiteAir(GestionMateriel* matosManager, GestionMesure* mesureMana
     TraitementMesure * traitementMesure = new TraitementMesure();
     Date * dateActuelle = new Date(date); 
 
-    int indice = traitementMesure->CalculQualiteAirZone(latitude,longitude,rayon,dateActuelle,mesureManager,matosManager);
+    vector<int> v;
+    int indice = traitementMesure->CalculQualiteAirZone(latitude,longitude,rayon,dateActuelle,mesureManager,matosManager,v);
     cout << "L'indice de l'air dans cette zone vaut : " << indice << endl << endl;
 
     delete dateActuelle;

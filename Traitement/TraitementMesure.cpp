@@ -58,6 +58,8 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
 {
     if(rayon > 0 && cleaner != nullptr && objetGestionMesure != nullptr && objetGestionMateriel != nullptr){
 
+
+        vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon);
     
         Date * dateDebutCourbe = new Date(cleaner->GetDateInstallation());
         dateDebutCourbe->operator-(7);
@@ -113,7 +115,7 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         for(int i = 0; i < nbDays; i++)
         {
             currentDay->operator+(1);
-            indice = this->CalculQualiteAirZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel);
+            indice = this->CalculQualiteAirZone(cleaner->GetLatitude(),cleaner->GetLongitude(),rayon,currentDay, objetGestionMesure, objetGestionMateriel,capteurDansLaZone);
             courbe[i][indice-1] = 1;
         }
         if(DEBUG) cout << "++ Remplissage de la courbe OK" << endl;
@@ -185,7 +187,7 @@ int CalculIndice(int moyenneParticule,int max, const int* tabIndice){
     return -1;
 }
 
-int TraitementMesure::CalculQualiteAirZone(double latitude, double longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
+int TraitementMesure::CalculQualiteAirZone(double latitude, double longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel, vector<int> capteurDansLaZone)
 /*
     Calcul de la qualité de l'air pour une zone repérée par ses coordonnées et délimitée 
     par un rayon.
@@ -205,8 +207,9 @@ int TraitementMesure::CalculQualiteAirZone(double latitude, double longitude, in
 
         if(DEBUG) cout << "++ Calcul Qualite Air Zone" << endl;
 
-        //On recupère les capteurs dans la zone
-        vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(latitude,longitude,rayon);
+        //On recupère les capteurs dans la zone si ce n'est pas déjà fait
+        if(capteurDansLaZone.size() == 0)
+        capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(latitude,longitude,rayon);
         
         if(capteurDansLaZone.size() > 0)
         {   
