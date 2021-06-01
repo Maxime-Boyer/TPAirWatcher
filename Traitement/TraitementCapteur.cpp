@@ -46,11 +46,17 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
 /*
     On définie un capteur comme défaillant lorsque ses mesures s'écartent trop des
     mesures des capteurs à proximité.
+    Cette méthode calcul donc, pour chaque substance mesuré par le capteur, un ecart-type
+    entre la mesure du capteur et celle des autres capteurs présent dans le rayon passé en paramètre.
+    Si cet écart type dépasse un seuil, le capteur est compté comme défaillant
 */
 {
+    //Vérification des paramètres
     if(capteur != nullptr && rayon > 1)
     {
         if(DEBUG) cout << "++ Methode identifierCapteurDefaillant"<<endl;
+
+        //initialisation des variables de mesures avant de les récupérer dans les fichiers .csv
         double o3CapteurDef = 0;
         double so2CapteurDef = 0;
         double no2CapteurDef = 0;
@@ -61,6 +67,7 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         double pm10Autre = 0;
         double nbMesure = 0;        
         
+        //récupération des mesures du capteurs à tester
         vector<Mesure*> mesuresAVerifier(gestionMesure->ObtenirDonneCapteurActuelle(capteur->GetSensorId()));
         o3CapteurDef = mesuresAVerifier[0]->GetValue();
         so2CapteurDef = mesuresAVerifier[1]->GetValue();
@@ -69,13 +76,14 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
 
         if(DEBUG) cout << "++ Debut boucle"<<endl;
 
+        //récupération de tous les capteurs dans la zone définie par les coordonée du capteur à tester et délimitée par le rayon en paramètre
         vector <int> capteurDansLaZone (gestionMateriel->ObtenirIdCapteurZone(capteur->GetLatitude(),capteur->GetLongitude(),rayon));
         for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
         {
+            //récupération des mesures des capteurs dans cette zone
             vector <Mesure*> mesures (gestionMesure->ObtenirDonneCapteurActuelle(capteurDansLaZone[i]));
             nbMesure++;
             for(vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
-            //for(int j = 0; j<4; j++)
             {
                 if((*mesuresIter)->GetTypeMesureId().compare("O3") == 0){
                     o3Autre = o3Autre + (*mesuresIter)->GetValue();
@@ -90,6 +98,8 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
         }
         if(DEBUG) cout << "++ Fin boucle"<<endl;
 
+        //calcul des moyennes des mesures dans la zone en écartant la mesure du capteur à comparer
+        //et de l'ecart-type pour chaque substance du capteur à tester
         double o3 = (o3Autre - o3CapteurDef)/(nbMesure-1);
         double so2 = (so2Autre - so2CapteurDef)/(nbMesure-1);
         double no2 = (no2Autre - no2CapteurDef)/(nbMesure-1);
@@ -102,6 +112,7 @@ bool TraitementCapteur::identifierCapteurDefaillant(Capteur * capteur, int rayon
 
         //Affichage de la défaillance du capteur en fonction d'un seuil choisi
         if(DEBUG) cout << "++ Affichage"<<endl;
+        //Choix du seuil arbitraire
         double seuil = 1;
         bool defaillance = false;
         for(int i = 0; i<4; i++)

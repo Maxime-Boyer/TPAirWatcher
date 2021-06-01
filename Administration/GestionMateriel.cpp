@@ -16,9 +16,6 @@ GestionMateriel::GestionMateriel(){
 }
 
 GestionMateriel::~GestionMateriel(){
-  /*
-        IMPORTANT : delete objet de type GestionMesure et ensuite objet de type GestionMateriel
-  */
 
   for(auto capteur : capteurs){
     delete capteur;
@@ -33,7 +30,7 @@ GestionMateriel::~GestionMateriel(){
 
 void GestionMateriel::MiseEnMemoireAirCleaner()
 /*
-  Ouverture du fichier cleaners.csv pour récupérer et utiliser ses informations
+  Ouverture du fichier cleaners.csv pour récupérer et stocker ses informations
 */
 {
   ifstream fic;
@@ -58,8 +55,7 @@ void GestionMateriel::MiseEnMemoireAirCleaner()
   size_t pos = 0;
   int i = 0;
 
-
-  //Tant que le fichier n'est pas vide
+    //Parcours du fichier 
     while(fic.eof() == 0){
         getline(fic,line);
 
@@ -101,7 +97,7 @@ void GestionMateriel::MiseEnMemoireAirCleaner()
 
 void GestionMateriel::MiseEnMemoireCapteur()
 /*
-  Ouverture du fichier sensors.csv pour récupérer et utiliser ses informations
+  Ouverture du fichier sensors.csv pour récupérer et stocker ses informations
 */
 {
     ifstream fic;
@@ -119,16 +115,12 @@ void GestionMateriel::MiseEnMemoireCapteur()
     double latitude;
     double longitude;
 
-    
-
-    
-
     string delimiter = ";";
     string partOfLine;
     size_t pos = 0;
     int i = 0;
 
-    //Tant que le fichier n'est pas vide
+    //Parcours du fichier
     while(fic.eof() == 0){
         getline(fic,line);
 
@@ -169,12 +161,14 @@ vector<int> GestionMateriel::ObtenirIdCapteurZone(double lat, double lon, double
   double latRadian = lat*0.01745;
   double lonRadian = lon*0.01745;
 
+  //Pour chaque capteur 
   for(vector<Capteur*>::iterator iterateurCapteur = capteurs.begin(); iterateurCapteur != capteurs.end(); iterateurCapteur++)
   {
     
     double latRadian2 = (*iterateurCapteur)->GetLatitude()*0.01745;
     double lonRadian2 = (*iterateurCapteur)->GetLongitude()*0.01745;
 
+    //On calcule la distance entre le capteur et le point de référence 
     distanceCapteur= acos(sin(latRadian)*sin(latRadian2)+cos(latRadian)*cos(latRadian2)*cos(lonRadian2-lonRadian));
     distanceCapteur = RAYON*distanceCapteur;
 

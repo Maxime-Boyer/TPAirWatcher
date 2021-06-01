@@ -27,7 +27,7 @@ GestionMesure::~GestionMesure(){
 
 void GestionMesure::MiseEnMemoireMesures()
 /*
-  Ouverture du fichier measurements.csv pour récupérer et utiliser ses informations
+  Ouverture du fichier measurements.csv pour récupérer et stocker ses informations
 */
 {
     ifstream fic;
@@ -57,7 +57,7 @@ void GestionMesure::MiseEnMemoireMesures()
     Date* actualDate = nullptr;
     int nbDate = -1;
 
-    //Tant que le fichier n'est pas vide
+    //Parcours du fichier 
     while(fic.eof() == 0){
         getline(fic,line);
         if(fic.eof() == 0){
@@ -111,11 +111,14 @@ void GestionMesure::MiseEnMemoireMesures()
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurActuelle(int sensorId)
 {
+    
     return  mesures[sensorId].back();
 }
 
 vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date){
+    
     vector<vector<Mesure*>> mesuresSensor = mesures[sensorId];
+
     for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
         if( ((*(itr))[0])->GetDateMesure()->equals(*date)){
             return *(itr);
@@ -127,9 +130,16 @@ vector<Mesure*> GestionMesure::ObtenirDonneCapteurJour(int sensorId, Date * date
 }
 
 vector<vector<Mesure*>> GestionMesure::ObtenirDonneCapteurPeriode(int sensorId, Date* start, Date* stop){
+   /*
+    Cette méthode n'est pas utilisée dans le projet 
+    Mais on pourrait l'utiliser pour par exemple récupérer toutes les données d'un coup 
+    sur toute la période de la courbe
+   */
    vector<vector<Mesure*>> mesuresSensor = mesures[sensorId]; 
    vector<vector<Mesure*>> mesuresToReturn; 
+
    bool toAdd = false;
+
    for(vector<vector<Mesure*>>::iterator itr = mesuresSensor.begin(); itr!= mesuresSensor.end(); itr++){
         if( ((*(itr))[0])->GetDateMesure()->equals(*start)){
             toAdd = true;
@@ -148,6 +158,6 @@ vector<vector<Mesure*>> GestionMesure::ObtenirDonneCapteurPeriode(int sensorId, 
     return v;
 }
 
-vector<vector<Mesure*>> GestionMesure::GetMesures(int sensorId){
+vector<vector<Mesure*>> GestionMesure::GetMesuresSensor(int sensorId){
     return mesures[sensorId];
 }

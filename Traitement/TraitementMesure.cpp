@@ -24,6 +24,14 @@
 #include <algorithm>
 using namespace std;
 
+//On remplit les tableaux d'indice à partir des valeurs du site 
+//https://fr.wikipedia.org/wiki/Indice_de_qualit%C3%A9_de_l%27air#:
+//~:text=Il%20existe%20principalement%20deux%20indices,l%27indice%20ATMO&text=pour%20les
+//%20agglom%C3%A9rations%20de%20taille,nombre%20plus%20r%C3%A9duit%20de%20polluants.
+const int tabIndiceAtmoO3[] = {29, 54, 79, 104, 149, 179, 209, 239, 30};
+const int tabIndiceAtmoNo2[] = {29,54,84,109,134,164,199,274,399};
+const int tabIndiceAtmoSo2[] = {39,79,119,159,199,249,299,399,499};
+const int tabIndiceAtmoPm10[] = {6,13,27,34,41,49,64,79};
 //------------------------------------------------------ Include personnel
 
 
@@ -34,63 +42,11 @@ using namespace std;
 //----------------------------------------------------- Méthodes publiques
 
 TraitementMesure::TraitementMesure(){
-    tabIndiceAtmoO3 = new int[9];
-    tabIndiceAtmoNo2 = new int[9];
-    tabIndiceAtmoSo2 = new int[9];
-    tabIndiceAtmoPm10 = new int[9];
-
-    //On remplit les tableaux d'indice à partir des valeurs du site 
-    //https://fr.wikipedia.org/wiki/Indice_de_qualit%C3%A9_de_l%27air#:
-    //~:text=Il%20existe%20principalement%20deux%20indices,l%27indice%20ATMO&text=pour%20les
-    //%20agglom%C3%A9rations%20de%20taille,nombre%20plus%20r%C3%A9duit%20de%20polluants.
-    tabIndiceAtmoO3[0] = 29;
-    tabIndiceAtmoO3[1] = 54;
-    tabIndiceAtmoO3[2] = 79;
-    tabIndiceAtmoO3[3] = 104;
-    tabIndiceAtmoO3[4] = 129;
-    tabIndiceAtmoO3[5] = 149;
-    tabIndiceAtmoO3[6] = 179;
-    tabIndiceAtmoO3[7] = 209;
-    tabIndiceAtmoO3[8] = 239;
-
-    tabIndiceAtmoNo2[0] = 29;
-    tabIndiceAtmoNo2[1] = 54;
-    tabIndiceAtmoNo2[2] = 84;
-    tabIndiceAtmoNo2[3] = 109;
-    tabIndiceAtmoNo2[4] = 134;
-    tabIndiceAtmoNo2[5] = 164;
-    tabIndiceAtmoNo2[6] = 199;
-    tabIndiceAtmoNo2[7] = 274;
-    tabIndiceAtmoNo2[8] = 399;
-
-    tabIndiceAtmoSo2[0] = 39;
-    tabIndiceAtmoSo2[1] = 79;
-    tabIndiceAtmoSo2[2] = 119;
-    tabIndiceAtmoSo2[3] = 159;
-    tabIndiceAtmoSo2[4] = 199;
-    tabIndiceAtmoSo2[5] = 249;
-    tabIndiceAtmoSo2[6] = 299;
-    tabIndiceAtmoSo2[7] = 399;
-    tabIndiceAtmoSo2[8] = 499;
-
-    tabIndiceAtmoPm10[0] = 6;
-    tabIndiceAtmoPm10[1] = 13;
-    tabIndiceAtmoPm10[2] = 20;
-    tabIndiceAtmoPm10[3] = 27;
-    tabIndiceAtmoPm10[4] = 34;
-    tabIndiceAtmoPm10[5] = 41;
-    tabIndiceAtmoPm10[6] = 49;
-    tabIndiceAtmoPm10[7] = 64;
-    tabIndiceAtmoPm10[8] = 79;
-
 
 }
 
 TraitementMesure::~TraitementMesure(){
-    delete[] tabIndiceAtmoO3;
-    delete[] tabIndiceAtmoNo2;
-    delete[] tabIndiceAtmoSo2;
-    delete[] tabIndiceAtmoPm10;
+
 }
 
 void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
@@ -123,20 +79,25 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         Date * dateFinCourbe = nullptr;
         if(DEBUG) cout << "++ Initialisation des dates de fin OK" << endl;
         
+        //Si le cleaner est désinstallé la courbe s'arrête 7 jour après sa désinstallation
         if(cleaner->GetDateDesinstallation() != nullptr){
             dateFinCourbe = new Date(cleaner->GetDateDesinstallation());
             dateFinCourbe->operator+(7);
         }
+        //Si le cleaner n'est pas désinstallé la courbe s'arrête à la date de la dernière mesure
         else{
             dateFinCourbe = new Date(dateActuelle);
             
         }
 
+
+        //Initialisation des variables de la courbe
         if(DEBUG) cout << "++ Récupération date de fin OK" << endl;
         int nbDays = dateDebutCourbe->Number_days_between(dateFinCourbe);
         
         int indice = 0;
         int indiceMax = 10;
+        //Pour chaque jour on stock son indice
         int ** courbe = new int*[nbDays];
 
         if(DEBUG) cout << "++ Initialisation des variables 1 OK" << endl;
@@ -148,6 +109,7 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         if(DEBUG) cout << "++ Declaration de la courbe OK" << endl;
         Date * currentDay = new Date(dateBeginGraph);
 
+        //Calcul de la qualité de l'air dans la zone choisie autour du air cleaner pour chaque jour de la courbe
         for(int i = 0; i < nbDays; i++)
         {
             currentDay->operator+(1);
@@ -156,11 +118,12 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
         }
         if(DEBUG) cout << "++ Remplissage de la courbe OK" << endl;
 
+        //Affichage de la courbe
+        //Pas d'algo particulier juste de l'affichage 
         cout << " # Qualité moyenne de l'air de la zone sur le temps de fonctionnement du cleaner" << endl;
         cout << "  ^" << endl;
         cout << "  |" << endl;
         for(int i = 0; i < indiceMax; i++){
-            //Le code qui suit est juste pour le visu
             if(indiceMax-i != 10) cout << " ";
             cout << indiceMax-i << "|";
             for(int j = 0; j < nbDays; j++){
@@ -201,7 +164,13 @@ void TraitementMesure::CourbeAirCleaner(AirCleaner * cleaner, int rayon, Gestion
 
 }
 
-int CalculIndice(int moyenneParticule,int max, int* tabIndice){
+
+int CalculIndice(int moyenneParticule,int max, const int* tabIndice){
+/*
+    Fonction qui permet de calculer l'indice d'une particule à partir de sa mesure
+    -> optimisée pour faire rapidement des tests sur plusieurs intervalles
+*/
+
     if(moyenneParticule >= max){
         return 10;
     }
@@ -216,7 +185,7 @@ int CalculIndice(int moyenneParticule,int max, int* tabIndice){
     return -1;
 }
 
-int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
+int TraitementMesure::CalculQualiteAirZone(double latitude, double longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel)
 /*
     Calcul de la qualité de l'air pour une zone repérée par ses coordonnées et délimitée 
     par un rayon.
@@ -236,18 +205,22 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
 
         if(DEBUG) cout << "++ Calcul Qualite Air Zone" << endl;
 
+        //On recupère les capteurs dans la zone
         vector<int> capteurDansLaZone = objetGestionMateriel->ObtenirIdCapteurZone(latitude,longitude,rayon);
+        
         if(capteurDansLaZone.size() > 0)
         {   
             if(DEBUG) cout << "++ Avant boucle for sur les capteurs"<< endl;
             for (unsigned int i = 0; i < capteurDansLaZone.size(); i++)
             {
-
+                
+                //Pour chaque capteur on récupère les mesures du jour choisi
                 if(DEBUG) cout << "++   rentrer boucle for sur les capteurs" << endl;
                 vector<Mesure*> mesures = objetGestionMesure->ObtenirDonneCapteurJour(capteurDansLaZone[i], date);
                 if(DEBUG) cout << "++   creation vector<mesure*> mesures" << endl;
                 nbMesure++;
                 
+                //On récupère les 4 valeurs qui constituent une mesure journalière
                 for (vector<Mesure*>::iterator mesuresIter = mesures.begin(); mesuresIter != mesures.end(); mesuresIter++)
                 {
                     if(DEBUG) cout << "++     rentrer for mesure comparaison" << endl;
@@ -263,14 +236,13 @@ int TraitementMesure::CalculQualiteAirZone(int latitude, int longitude, int rayo
                 }
             }
 
-            
+            //Calcul des moyennes
             o3 = o3/nbMesure;
             so2 = so2/nbMesure;
             no2 = no2/nbMesure;
             pm10 = pm10/nbMesure;
 
-            //Exemple pour l’indice de O3, c’est exactement pareil pour le reste
-        
+            //Calcul des indices
             indiceO3 = CalculIndice(o3,240,tabIndiceAtmoO3);
             indiceNo2 = CalculIndice(no2,400,tabIndiceAtmoNo2);
             indiceSo2 = CalculIndice(so2,500,tabIndiceAtmoSo2);

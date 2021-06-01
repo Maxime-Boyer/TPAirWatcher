@@ -49,7 +49,7 @@ vector<vector<Mesure*>> ObtenirDonneCapteurPeriode(int sensorId, Date * start, D
 
 void MiseEnMemoireMesures();
 
-vector<vector<Mesure*>> GetMesures(int sensorId);
+vector<vector<Mesure*>> GetMesuresSensor(int sensorId);
 
 
 
@@ -60,6 +60,12 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
     vector<vector<vector<Mesure*>>> mesures;
+    /*
+        Organisation de mesures :
+        Un vector pour chaque capteur
+        Chaque vector de capteur contient des vectors de 4 mesures qui correspondent
+        au 4 mesure d'une journée. 
+    */
 };
 
 //-------------------------------- Autres définitions dépendantes de <GestionMesure>

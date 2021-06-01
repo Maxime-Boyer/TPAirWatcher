@@ -43,13 +43,9 @@ public:
     TraitementMesure();
     ~TraitementMesure();
     void CourbeAirCleaner(AirCleaner * cleaner, int rayon, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);
-    int CalculQualiteAirZone(int Latitude, int Longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);
+    int CalculQualiteAirZone(double latitude, double longitude, int rayon, Date * date, GestionMesure * objetGestionMesure,  GestionMateriel * objetGestionMateriel);
 //------------------------------------------------------------------ PRIVE
 
-    int *tabIndiceAtmoO3;
-    int *tabIndiceAtmoNo2;
-    int *tabIndiceAtmoSo2;
-    int *tabIndiceAtmoPm10;
 
       
 protected:
